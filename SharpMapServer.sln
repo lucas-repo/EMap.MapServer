@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.645
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpMapServer.Services", "SharpMapServer.Services\SharpMapServer.Services.csproj", "{EC244A30-6D57-48B9-AA2D-2A18F1659279}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EC244A30-6D57-48B9-AA2D-2A18F1659279}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC244A30-6D57-48B9-AA2D-2A18F1659279}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC244A30-6D57-48B9-AA2D-2A18F1659279}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC244A30-6D57-48B9-AA2D-2A18F1659279}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1FA9E5BD-BA03-46E9-8996-B911C3AD0015}
+	EndGlobalSection
+EndGlobal

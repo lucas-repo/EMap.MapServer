@@ -15,22 +15,22 @@ SharpMapServer.Ogc.Ows2：命名空间为http://www.opengis.net/ows/2.0的相关
 SharpMapServer.Isotc211.Gco：命名空间为http://www.isotc211.org/2005/gco的相关类
 SharpMapServer.Isotc211.Gmd：命名空间为http://www.isotc211.org/2005/gmd的相关类
 SharpMapServer.Isotc211.Gsr：命名空间为http://www.isotc211.org/2005/gmd的相关类
-SharpMapServer.Isotc211.Gss：命名空间为aaaa的相关类
-SharpMapServer.Isotc211.Gts：命名空间为aaaa的相关类
+SharpMapServer.Isotc211.Gss：命名空间为http://www.isotc211.org/2005/gss的相关类
+SharpMapServer.Isotc211.Gts：命名空间为http://www.isotc211.org/2005/gts的相关类
 
-SharpMapServer.Ogc.Wcs2：命名空间为aaaa的相关类
-SharpMapServer.Ogc.Wfs2：命名空间为aaaa的相关类
-SharpMapServer.Ogc.Wms：命名空间为aaaa的相关类
-SharpMapServer.Ogc.Wmts1：命名空间为aaaa的相关类
+SharpMapServer.Ogc.Wcs2：命名空间为http://www.opengis.net/wcs/2.0的相关类
+SharpMapServer.Ogc.Wfs2：命名空间为http://www.opengis.net/wfs/2.0的相关类
+SharpMapServer.Ogc.Wms：命名空间为http://www.opengis.net/wms的相关类
+SharpMapServer.Ogc.Wmts1：命名空间为http://www.opengis.net/wmts/1.0的相关类
 
-SharpMapServer.Ogc：命名空间为aaaa的相关类
-SharpMapServer.Ogc.Fes2：命名空间为aaaa的相关类
-SharpMapServer.Ogc.Security1：命名空间为aaaa的相关类
-SharpMapServer.Ogc.Swe2：命名空间为aaaa的相关类
+SharpMapServer.Ogc：命名空间为http://www.opengis.net/ogc的相关类
+SharpMapServer.Ogc.Fes2：命名空间为http://www.opengis.net/fes/2.0的相关类
+SharpMapServer.Ogc.Security1：命名空间为http://www.opengis.net/security/1.0的相关类
+SharpMapServer.Ogc.Swe2：命名空间为http://www.opengis.net/swe/2.0的相关类
 
-SharpMapServer.SMIL20：命名空间为aaaa的相关类
-SharpMapServer.SMIL20.Language：命名空间为aaaa的相关类
-SharpMapServer.Xlink：命名空间为aaaa的相关类
+SharpMapServer.SMIL20：命名空间为http://www.w3.org/2001/SMIL20的相关类
+SharpMapServer.SMIL20.Language：命名空间为http://www.w3.org/2001/SMIL20的相关类
+SharpMapServer.Xlink：命名空间为http://www.w3.org/1999/xlink的相关类
 ----------------------
 
 SharpMapServer.Extensions：类扩展

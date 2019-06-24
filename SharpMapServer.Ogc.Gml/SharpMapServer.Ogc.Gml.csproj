@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>E:\LC\Codes\SharpMapServer\Bin\Debug\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SharpMapServer.SMIL20.Language\SharpMapServer.SMIL20.Language.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="netstandard">
+      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\netstandard.library\2.0.3\build\netstandard2.0\ref\netstandard.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

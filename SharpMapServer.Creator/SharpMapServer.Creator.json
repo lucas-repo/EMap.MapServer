@@ -1,0 +1,8 @@
+{
+  "ConnectionStrings": {
+    "ConfigContext": "Data Source=sqlite.db"
+  },
+  "Href": "https://localhost:44367",
+  "privatePath": "DotSpatial;DotSpatial\\Windows Extensions\\DotSpatial.Data.Rasters.GdalExtension"
+
+}

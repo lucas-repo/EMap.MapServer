@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\Bin\Debug\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\Bin\Release\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IMap.MapServer.Isotc211.Gco\IMap.MapServer.Isotc211.Gco.csproj" />
+    <ProjectReference Include="..\IMap.MapServer.Isotc211.Gsr\IMap.MapServer.Isotc211.Gsr.csproj" />
+    <ProjectReference Include="..\IMap.MapServer.Isotc211.Gss\IMap.MapServer.Isotc211.Gss.csproj" />
+    <ProjectReference Include="..\IMap.MapServer.Isotc211.Gts\IMap.MapServer.Isotc211.Gts.csproj" />
+  </ItemGroup>
+
+</Project>

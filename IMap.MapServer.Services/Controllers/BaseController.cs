@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 
-namespace IMap.MapServer.Services.Controllers
+namespace EMap.MapServer.Services.Controllers
 {
     public abstract class BaseController : ControllerBase, IDisposable
     {

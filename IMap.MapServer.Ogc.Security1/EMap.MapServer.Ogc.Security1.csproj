@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IMap.MapServer.Ogc.Ows1_1\IMap.MapServer.Ogc.Ows1_1.csproj" />
+    <ProjectReference Include="..\IMap.MapServer.Ogc.Ows1_1\EMap.MapServer.Ogc.Ows1_1.csproj" />
   </ItemGroup>
 
   <ItemGroup>

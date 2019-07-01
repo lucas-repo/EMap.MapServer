@@ -1,4 +1,4 @@
-﻿namespace IMap.MapServer.Ogc {
+﻿namespace EMap.MapServer.Ogc {
     
     
     

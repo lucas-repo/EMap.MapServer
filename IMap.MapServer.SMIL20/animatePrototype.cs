@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace IMap.MapServer.SMIL20 {
+namespace EMap.MapServer.SMIL20 {
     
     
     

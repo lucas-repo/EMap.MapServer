@@ -1,20 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using IMap.MapServer.Ogc.Ows1_1;
-using IMap.MapServer.Ogc.Wmts1;
-using IMap.MapServer.Services.Models;
+using EMap.MapServer.Ogc.Ows1_1;
+using EMap.MapServer.Ogc.Wmts1;
+using EMap.MapServer.Services.Models;
 using System;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IMap.MapServer.Extensions;
-using IMap.MapServer.Ogc.Services;
+using EMap.MapServer.Extensions;
+using EMap.MapServer.Ogc.Services;
 
-namespace IMap.MapServer.Services.Controllers
+namespace EMap.MapServer.Services.Controllers
 {
     //[Route("api/[controller]")]
-    [Route("IMap.MapServer/Services/{serviceName}/MapServer/Wmts")]
+    [Route("EMap.MapServer/Services/{serviceName}/MapServer/Wmts")]
     [ApiController]
     public class WmtsController : BaseController
     {

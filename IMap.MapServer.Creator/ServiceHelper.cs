@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using IMap.MapServer.Ogc.Services;
-using IMap.MapServer.Ogc.Wmts1;
-using IMap.MapServer.Services.Models;
+using EMap.MapServer.Ogc.Services;
+using EMap.MapServer.Ogc.Wmts1;
+using EMap.MapServer.Services.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IMap.MapServer.Creator
+namespace EMap.MapServer.Creator
 {
     public class ServiceHelper
     {
@@ -75,7 +75,7 @@ namespace IMap.MapServer.Creator
             Dictionary<string, string> layerNameAndPathes = new Dictionary<string, string>();
             if (ogcService is IWmtsService wmts1Service)
             {
-                href = $"{href}/IMap.MapServer/Services/{serviceName}/MapServer/Wmts";
+                href = $"{href}/EMap.MapServer/Services/{serviceName}/MapServer/Wmts";
                 Capabilities capabilities = wmts1Service.CreateCapabilities(href);
                 string directory = null;
                 foreach (var file in files)

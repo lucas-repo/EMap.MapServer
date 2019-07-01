@@ -13,7 +13,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IMap.MapServer.SMIL20.Language\IMap.MapServer.SMIL20.Language.csproj" />
+    <ProjectReference Include="..\IMap.MapServer.Extensions\EMap.MapServer.Extensions.csproj" />
+    <ProjectReference Include="..\IMap.MapServer.Ogc.Wfs2\EMap.MapServer.Ogc.Wfs2.csproj" />
+    <ProjectReference Include="..\IMap.MapServer.Ogc.Wmts1\EMap.MapServer.Ogc.Wmts1.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,7 +1,7 @@
-﻿using IMap.MapServer.Ogc.Ows1_1;
+﻿using EMap.MapServer.Ogc.Ows1_1;
 using System.Xml.Linq;
 
-namespace IMap.MapServer.Ogc.Security1
+namespace EMap.MapServer.Ogc.Security1
 {
     
     

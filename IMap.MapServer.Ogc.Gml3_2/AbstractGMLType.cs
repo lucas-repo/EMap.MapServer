@@ -1,4 +1,4 @@
-﻿namespace IMap.MapServer.Ogc.Gml3_2 { 
+﻿namespace EMap.MapServer.Ogc.Gml3_2 { 
 
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CompositeValueType))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ValueArrayType))]

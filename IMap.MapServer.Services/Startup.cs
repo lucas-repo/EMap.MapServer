@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using IMap.MapServer.Services.Models;
+using EMap.MapServer.Services.Models;
 using Microsoft.EntityFrameworkCore.Sqlite;
 using System;
 using System.Reflection;
 using System.IO;
 
-namespace IMap.MapServer.Services
+namespace EMap.MapServer.Services
 {
     public class Startup
     {

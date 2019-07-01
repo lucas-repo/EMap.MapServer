@@ -1,9 +1,9 @@
-﻿using IMap.MapServer.Ogc.Services;
+﻿using EMap.MapServer.Ogc.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IMap.MapServer.DotSpatial
+namespace EMap.MapServer.DotSpatial
 {
     public class DsWmts1ServiceFactory : WmtsServiceFasctory, IDsWmts1ServiceFactory
     {

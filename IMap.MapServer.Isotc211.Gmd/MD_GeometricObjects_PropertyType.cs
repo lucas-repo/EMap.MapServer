@@ -1,4 +1,4 @@
-﻿namespace IMap.MapServer.Isotc211.Gmd {
+﻿namespace EMap.MapServer.Isotc211.Gmd {
     
     
     

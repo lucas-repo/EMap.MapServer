@@ -1,4 +1,4 @@
-﻿namespace IMap.MapServer.Ogc.Fes2 {
+﻿namespace EMap.MapServer.Ogc.Fes2 {
     
     
     

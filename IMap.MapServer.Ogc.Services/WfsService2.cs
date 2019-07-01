@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using IMap.MapServer.Ogc.Wfs2;
+using EMap.MapServer.Ogc.Wfs2;
 
-namespace IMap.MapServer.Ogc.Services
+namespace EMap.MapServer.Ogc.Services
 {
     public abstract class WfsService2 : OgcService, IWfsService2
     {

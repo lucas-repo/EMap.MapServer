@@ -1,7 +1,7 @@
-﻿using IMap.MapServer.Xlink;
+﻿using EMap.MapServer.Xlink;
 using System.Xml.Linq;
 
-namespace IMap.MapServer.Ogc.Wfs2 {
+namespace EMap.MapServer.Ogc.Wfs2 {
     
     
     

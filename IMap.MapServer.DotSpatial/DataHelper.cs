@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IMap.MapServer.DotSpatial
+namespace EMap.MapServer.DotSpatial
 {
     public static class DataHelper
     {

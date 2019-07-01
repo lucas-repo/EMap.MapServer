@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IMap.MapServer.SMIL20\IMap.MapServer.SMIL20.csproj" />
+    <ProjectReference Include="..\IMap.MapServer.SMIL20.Language\EMap.MapServer.SMIL20.Language.csproj" />
   </ItemGroup>
 
   <ItemGroup>

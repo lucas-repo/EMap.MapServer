@@ -1,6 +1,6 @@
-﻿using IMap.MapServer.Isotc211.Gco;
+﻿using EMap.MapServer.Isotc211.Gco;
 
-namespace IMap.MapServer.Isotc211.Gmd {
+namespace EMap.MapServer.Isotc211.Gmd {
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(AbstractDQ_Completeness_Type))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(DQ_CompletenessCommission_Type))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(DQ_CompletenessOmission_Type))]

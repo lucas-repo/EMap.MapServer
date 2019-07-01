@@ -71,17 +71,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IMap.MapServer.Ogc.Ows1_1\IMap.MapServer.Ogc.Ows1_1.csproj">
+    <ProjectReference Include="..\IMap.MapServer.Ogc.Ows1_1\EMap.MapServer.Ogc.Ows1_1.csproj">
       <Project>{768C7796-B6DB-49C6-8026-ADC09BE979E1}</Project>
-      <Name>IMap.MapServer.Ogc.Ows1_1</Name>
+      <Name>EMap.MapServer.Ogc.Ows1_1</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IMap.MapServer.Ogc.Services\IMap.MapServer.Ogc.Services.csproj">
+    <ProjectReference Include="..\IMap.MapServer.Ogc.Services\EMap.MapServer.Ogc.Services.csproj">
       <Project>{0A38FDD8-BF27-490C-91CA-30EEC89C24E7}</Project>
-      <Name>IMap.MapServer.Ogc.Services</Name>
+      <Name>EMap.MapServer.Ogc.Services</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IMap.MapServer.Ogc.Wmts1\IMap.MapServer.Ogc.Wmts1.csproj">
+    <ProjectReference Include="..\IMap.MapServer.Ogc.Wmts1\EMap.MapServer.Ogc.Wmts1.csproj">
       <Project>{D4D968A1-CA5C-4C81-B577-C8CF658FA475}</Project>
-      <Name>IMap.MapServer.Ogc.Wmts1</Name>
+      <Name>EMap.MapServer.Ogc.Wmts1</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

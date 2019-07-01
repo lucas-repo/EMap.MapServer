@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29001.49
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.271
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Isotc211", "Isotc211", "{A035E2C3-5413-476E-92D8-0E641B12ED05}"
 EndProject
@@ -15,59 +15,59 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{22
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Schemas", "Schemas", "{C8E39822-E596-4B27-A8B9-B6770EA620B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IMap.MapServer.Ogc.Services.DotSpatial", "IMap.MapServer.DotSpatial\IMap.MapServer.Ogc.Services.DotSpatial.csproj", "{AAA7845F-D4F0-46F6-80AD-F1BCFBAEC4EB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMap.MapServer.Ogc.Services.DotSpatial", "IMap.MapServer.DotSpatial\EMap.MapServer.Ogc.Services.DotSpatial.csproj", "{AAA7845F-D4F0-46F6-80AD-F1BCFBAEC4EB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMap.MapServer.Isotc211.Gco", "IMap.MapServer.Isotc211.Gco\IMap.MapServer.Isotc211.Gco.csproj", "{97BF71CA-8379-4165-A778-51E91F03D589}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Isotc211.Gco", "IMap.MapServer.Isotc211.Gco\EMap.MapServer.Isotc211.Gco.csproj", "{97BF71CA-8379-4165-A778-51E91F03D589}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMap.MapServer.Isotc211.Gmd", "IMap.MapServer.Isotc211.Gmd\IMap.MapServer.Isotc211.Gmd.csproj", "{5A2BAECE-06F9-4ED7-A06B-2BDCCB8DB0D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Isotc211.Gmd", "IMap.MapServer.Isotc211.Gmd\EMap.MapServer.Isotc211.Gmd.csproj", "{5A2BAECE-06F9-4ED7-A06B-2BDCCB8DB0D2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMap.MapServer.Isotc211.Gsr", "IMap.MapServer.Isotc211.Gsr\IMap.MapServer.Isotc211.Gsr.csproj", "{B2759B19-15E5-417B-98D4-1EAAE6C2C2AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Isotc211.Gsr", "IMap.MapServer.Isotc211.Gsr\EMap.MapServer.Isotc211.Gsr.csproj", "{B2759B19-15E5-417B-98D4-1EAAE6C2C2AD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMap.MapServer.Isotc211.Gss", "IMap.MapServer.Isotc211.Gss\IMap.MapServer.Isotc211.Gss.csproj", "{AEE65D4F-0426-443E-B89F-B0E9E9C0E8C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Isotc211.Gss", "IMap.MapServer.Isotc211.Gss\EMap.MapServer.Isotc211.Gss.csproj", "{AEE65D4F-0426-443E-B89F-B0E9E9C0E8C1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMap.MapServer.Isotc211.Gts", "IMap.MapServer.Isotc211.Gts\IMap.MapServer.Isotc211.Gts.csproj", "{2AC7B085-E831-42AF-9A30-9E5A9255FAA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Isotc211.Gts", "IMap.MapServer.Isotc211.Gts\EMap.MapServer.Isotc211.Gts.csproj", "{2AC7B085-E831-42AF-9A30-9E5A9255FAA9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMap.MapServer.Ogc.Gml", "IMap.MapServer.Ogc.Gml\IMap.MapServer.Ogc.Gml.csproj", "{BCE51DE1-6A69-494A-BD46-27DC2EF3D7B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Ogc.Gml", "IMap.MapServer.Ogc.Gml\EMap.MapServer.Ogc.Gml.csproj", "{BCE51DE1-6A69-494A-BD46-27DC2EF3D7B6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMap.MapServer.Ogc.Gml3_2", "IMap.MapServer.Ogc.Gml3_2\IMap.MapServer.Ogc.Gml3_2.csproj", "{2086C910-E544-4DC3-AD05-41E39F6C19E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Ogc.Gml3_2", "IMap.MapServer.Ogc.Gml3_2\EMap.MapServer.Ogc.Gml3_2.csproj", "{2086C910-E544-4DC3-AD05-41E39F6C19E3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMap.MapServer.Ogc.Gmlcov1", "IMap.MapServer.Ogc.Gmlcov1\IMap.MapServer.Ogc.Gmlcov1.csproj", "{8C5B23E3-14A0-4AAD-8AC8-1AD4206E8A72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Ogc.Gmlcov1", "IMap.MapServer.Ogc.Gmlcov1\EMap.MapServer.Ogc.Gmlcov1.csproj", "{8C5B23E3-14A0-4AAD-8AC8-1AD4206E8A72}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMap.MapServer.Ogc.Ows1_1", "IMap.MapServer.Ogc.Ows1_1\IMap.MapServer.Ogc.Ows1_1.csproj", "{768C7796-B6DB-49C6-8026-ADC09BE979E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Ogc.Ows1_1", "IMap.MapServer.Ogc.Ows1_1\EMap.MapServer.Ogc.Ows1_1.csproj", "{768C7796-B6DB-49C6-8026-ADC09BE979E1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMap.MapServer.Ogc.Ows2", "IMap.MapServer.Ogc.Ows2\IMap.MapServer.Ogc.Ows2.csproj", "{D526EA7C-3A39-470E-9A0C-CFF47EB482F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Ogc.Ows2", "IMap.MapServer.Ogc.Ows2\EMap.MapServer.Ogc.Ows2.csproj", "{D526EA7C-3A39-470E-9A0C-CFF47EB482F5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMap.MapServer.Ogc.Wcs2", "IMap.MapServer.Ogc.Wcs2\IMap.MapServer.Ogc.Wcs2.csproj", "{812D356A-C12C-4F1F-A3E3-E613C6B7BD88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Ogc.Wcs2", "IMap.MapServer.Ogc.Wcs2\EMap.MapServer.Ogc.Wcs2.csproj", "{812D356A-C12C-4F1F-A3E3-E613C6B7BD88}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMap.MapServer.Ogc.Wfs2", "IMap.MapServer.Ogc.Wfs2\IMap.MapServer.Ogc.Wfs2.csproj", "{E1DABBE2-B5A7-47A9-A4AD-A80E4003A832}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Ogc.Wfs2", "IMap.MapServer.Ogc.Wfs2\EMap.MapServer.Ogc.Wfs2.csproj", "{E1DABBE2-B5A7-47A9-A4AD-A80E4003A832}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMap.MapServer.Ogc.Wms", "IMap.MapServer.Ogc.Wms\IMap.MapServer.Ogc.Wms.csproj", "{6E12339F-DF11-466E-A2D8-49FB145C73B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Ogc.Wms", "IMap.MapServer.Ogc.Wms\EMap.MapServer.Ogc.Wms.csproj", "{6E12339F-DF11-466E-A2D8-49FB145C73B9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMap.MapServer.Ogc.Wmts1", "IMap.MapServer.Ogc.Wmts1\IMap.MapServer.Ogc.Wmts1.csproj", "{D4D968A1-CA5C-4C81-B577-C8CF658FA475}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Ogc.Wmts1", "IMap.MapServer.Ogc.Wmts1\EMap.MapServer.Ogc.Wmts1.csproj", "{D4D968A1-CA5C-4C81-B577-C8CF658FA475}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMap.MapServer.Ogc", "IMap.MapServer.Ogc\IMap.MapServer.Ogc.csproj", "{EBD68CB5-EBDC-426F-BB05-18CCBF42CB65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Ogc", "IMap.MapServer.Ogc\EMap.MapServer.Ogc.csproj", "{EBD68CB5-EBDC-426F-BB05-18CCBF42CB65}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMap.MapServer.Ogc.Security1", "IMap.MapServer.Ogc.Security1\IMap.MapServer.Ogc.Security1.csproj", "{795EFF59-C4F1-45B5-AB1B-7FBB18EE5150}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Ogc.Security1", "IMap.MapServer.Ogc.Security1\EMap.MapServer.Ogc.Security1.csproj", "{795EFF59-C4F1-45B5-AB1B-7FBB18EE5150}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMap.MapServer.Ogc.Swe2", "IMap.MapServer.Ogc.Swe2\IMap.MapServer.Ogc.Swe2.csproj", "{FAA98190-CA1C-46B2-9C30-0D4D716EEEA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Ogc.Swe2", "IMap.MapServer.Ogc.Swe2\EMap.MapServer.Ogc.Swe2.csproj", "{FAA98190-CA1C-46B2-9C30-0D4D716EEEA2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMap.MapServer.Ogc.Services.Gdals", "IMap.MapServer.Ogc.Services.Gdal\IMap.MapServer.Ogc.Services.Gdals.csproj", "{0E66EE52-4C8D-40DE-BDE0-5B9203032161}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Ogc.Services.Gdals", "IMap.MapServer.Ogc.Services.Gdal\EMap.MapServer.Ogc.Services.Gdals.csproj", "{0E66EE52-4C8D-40DE-BDE0-5B9203032161}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMap.MapServer.Ogc.Services", "IMap.MapServer.Ogc.Services\IMap.MapServer.Ogc.Services.csproj", "{0A38FDD8-BF27-490C-91CA-30EEC89C24E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Ogc.Services", "IMap.MapServer.Ogc.Services\EMap.MapServer.Ogc.Services.csproj", "{0A38FDD8-BF27-490C-91CA-30EEC89C24E7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMap.MapServer.Ogc.Fes2", "IMap.MapServer.Ogc.Fes2\IMap.MapServer.Ogc.Fes2.csproj", "{FE82B5EC-D259-497A-B24A-8BB3E0A80ABC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Ogc.Fes2", "IMap.MapServer.Ogc.Fes2\EMap.MapServer.Ogc.Fes2.csproj", "{FE82B5EC-D259-497A-B24A-8BB3E0A80ABC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMap.MapServer.SMIL20", "IMap.MapServer.SMIL20\IMap.MapServer.SMIL20.csproj", "{F65F4BC0-6962-47E4-B0C5-05ED949A6CBA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.SMIL20", "IMap.MapServer.SMIL20\EMap.MapServer.SMIL20.csproj", "{F65F4BC0-6962-47E4-B0C5-05ED949A6CBA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMap.MapServer.SMIL20.Language", "IMap.MapServer.SMIL20.Language\IMap.MapServer.SMIL20.Language.csproj", "{7DD9044B-DBDC-42C5-B827-F1FA3BDB4DB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.SMIL20.Language", "IMap.MapServer.SMIL20.Language\EMap.MapServer.SMIL20.Language.csproj", "{7DD9044B-DBDC-42C5-B827-F1FA3BDB4DB5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMap.MapServer.Xlink", "IMap.MapServer.Xlink\IMap.MapServer.Xlink.csproj", "{E68050B7-468D-45AE-A8C3-B526A69F238B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Xlink", "IMap.MapServer.Xlink\EMap.MapServer.Xlink.csproj", "{E68050B7-468D-45AE-A8C3-B526A69F238B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMap.MapServer.Creator", "IMap.MapServer.Creator\IMap.MapServer.Creator.csproj", "{3A61735C-ED53-4AE9-9C7F-F2A35D4424BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Creator", "IMap.MapServer.Creator\EMap.MapServer.Creator.csproj", "{3A61735C-ED53-4AE9-9C7F-F2A35D4424BB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMap.MapServer.Extensions", "IMap.MapServer.Extensions\IMap.MapServer.Extensions.csproj", "{DE5CD238-6842-43F3-8BEF-BBF7E9E6F9D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Extensions", "IMap.MapServer.Extensions\EMap.MapServer.Extensions.csproj", "{DE5CD238-6842-43F3-8BEF-BBF7E9E6F9D4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IMap.MapServer.Services", "IMap.MapServer.Services\IMap.MapServer.Services.csproj", "{076C95B4-319A-48D0-9F6A-AE456F12AD1F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Services", "IMap.MapServer.Services\EMap.MapServer.Services.csproj", "{076C95B4-319A-48D0-9F6A-AE456F12AD1F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,6 +1,6 @@
-﻿using IMap.MapServer.Ogc.Gml;
+﻿using EMap.MapServer.Ogc.Gml;
 
-namespace IMap.MapServer.Isotc211.Gco {
+namespace EMap.MapServer.Isotc211.Gco {
     
     
     

@@ -1,14 +1,14 @@
 ﻿using DotSpatial.Data;
 using DotSpatial.Projections;
 using DotSpatial.Symbology;
-using IMap.MapServer.Ogc.Ows1_1;
-using IMap.MapServer.Ogc.Wmts1;
+using EMap.MapServer.Ogc.Ows1_1;
+using EMap.MapServer.Ogc.Wmts1;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IMap.MapServer.DotSpatial
+namespace EMap.MapServer.DotSpatial
 {
     public static class CapabilitiesHelper
     {
@@ -372,7 +372,7 @@ namespace IMap.MapServer.DotSpatial
             #endregion
 
             #region ServiceProvider
-            string poroviderName = "IMap.MapServer";
+            string poroviderName = "EMap.MapServer";
             OnlineResourceType providerSiteType = new OnlineResourceType()
             {
                 href = href

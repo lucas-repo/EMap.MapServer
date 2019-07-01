@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace IMap.MapServer.Creator
+namespace EMap.MapServer.Creator
 {
     public class JsonSettings
     {
         public IConfigurationRoot ConfigurationRoot { get; }
         private JsonSettings()
         {
-            IConfigurationBuilder builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("IMap.MapServer.Creator.json");
+            IConfigurationBuilder builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("EMap.MapServer.Creator.json");
             ConfigurationRoot = builder.Build();
         }
         private static JsonSettings _defaultSettings;

@@ -1,6 +1,6 @@
-﻿using IMap.MapServer.Ogc.Services;
+﻿using EMap.MapServer.Ogc.Services;
 
-namespace IMap.MapServer.DotSpatial
+namespace EMap.MapServer.DotSpatial
 {
     public interface IDsWmts1Service: IWmtsService
     {

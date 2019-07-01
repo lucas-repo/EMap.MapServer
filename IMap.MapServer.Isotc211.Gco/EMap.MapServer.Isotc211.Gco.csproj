@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -13,17 +13,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Gdal.Core" Version="1.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\IMap.MapServer.Ogc.Services\IMap.MapServer.Ogc.Services.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="IMap.Gis.Symbology">
-      <HintPath>..\..\IMap.Gis\Bin\Debug\netstandard2.0\IMap.Gis.Symbology.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\IMap.MapServer.Ogc.Gml\EMap.MapServer.Ogc.Gml.csproj" />
+    <ProjectReference Include="..\IMap.MapServer.Xlink\EMap.MapServer.Xlink.csproj" />
   </ItemGroup>
 
 </Project>

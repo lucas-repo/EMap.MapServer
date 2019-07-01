@@ -1,6 +1,6 @@
-﻿using IMap.MapServer.SMIL20.Language;
+﻿using EMap.MapServer.SMIL20.Language;
 
-namespace IMap.MapServer.Ogc.Gml {
+namespace EMap.MapServer.Ogc.Gml {
     
     
     /// <remarks/>

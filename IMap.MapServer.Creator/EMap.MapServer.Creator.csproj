@@ -27,10 +27,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IMap.MapServer.DotSpatial\IMap.MapServer.Ogc.Services.DotSpatial.csproj" />
-    <ProjectReference Include="..\IMap.MapServer.Ogc.Services.Gdal\IMap.MapServer.Ogc.Services.Gdals.csproj" />
-    <ProjectReference Include="..\IMap.MapServer.Ogc.Services\IMap.MapServer.Ogc.Services.csproj" />
-    <ProjectReference Include="..\IMap.MapServer.Services\IMap.MapServer.Services.csproj" />
+    <ProjectReference Include="..\IMap.MapServer.DotSpatial\EMap.MapServer.Ogc.Services.DotSpatial.csproj" />
+    <ProjectReference Include="..\IMap.MapServer.Ogc.Services.Gdal\EMap.MapServer.Ogc.Services.Gdals.csproj" />
+    <ProjectReference Include="..\IMap.MapServer.Ogc.Services\EMap.MapServer.Ogc.Services.csproj" />
+    <ProjectReference Include="..\IMap.MapServer.Services\EMap.MapServer.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace IMap.MapServer.Ogc.Gml {
+namespace EMap.MapServer.Ogc.Gml {
     
     
     /// <remarks/>

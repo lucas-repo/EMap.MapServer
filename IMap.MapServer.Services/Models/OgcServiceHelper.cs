@@ -1,11 +1,11 @@
-﻿//using IMap.MapServer.DotSpatial;
-using IMap.MapServer.Ogc.Services;
+﻿//using EMap.MapServer.DotSpatial;
+using EMap.MapServer.Ogc.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace IMap.MapServer.Services.Models
+namespace EMap.MapServer.Services.Models
 {
     public static class OgcServiceHelper
     {

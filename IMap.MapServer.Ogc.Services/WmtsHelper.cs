@@ -1,12 +1,12 @@
-﻿using IMap.MapServer.Extensions;
-using IMap.MapServer.Ogc.Ows1_1;
-using IMap.MapServer.Ogc.Wmts1;
+﻿using EMap.MapServer.Extensions;
+using EMap.MapServer.Ogc.Ows1_1;
+using EMap.MapServer.Ogc.Wmts1;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IMap.MapServer.Ogc.Services
+namespace EMap.MapServer.Ogc.Services
 {
     public static class WmtsHelper
     {

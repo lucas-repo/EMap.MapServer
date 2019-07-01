@@ -5,7 +5,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace IMap.MapServer.Ogc.Services
+namespace EMap.MapServer.Ogc.Services
 {
     public static class XmlHelper
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace IMap.MapServer.Extensions
+namespace EMap.MapServer.Extensions
 {
     public static class StringExtension
     {

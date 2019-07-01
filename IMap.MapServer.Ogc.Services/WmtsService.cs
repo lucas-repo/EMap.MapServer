@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
-using IMap.MapServer.Ogc.Ows1_1;
-using IMap.MapServer.Ogc.Wmts1;
+using EMap.MapServer.Ogc.Ows1_1;
+using EMap.MapServer.Ogc.Wmts1;
 
-namespace IMap.MapServer.Ogc.Services
+namespace EMap.MapServer.Ogc.Services
 {
     public abstract class WmtsService : OgcService, IWmtsService
     {
@@ -151,7 +151,7 @@ namespace IMap.MapServer.Ogc.Services
             #endregion
 
             #region ServiceProvider
-            string poroviderName = "IMap.MapServer";
+            string poroviderName = "EMap.MapServer";
             OnlineResourceType providerSiteType = new OnlineResourceType()
             {
                 href = href

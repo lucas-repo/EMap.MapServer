@@ -1,6 +1,6 @@
-﻿using IMap.MapServer.Ogc.Wfs2;
+﻿using EMap.MapServer.Ogc.Wfs2;
 
-namespace IMap.MapServer.Ogc.Services
+namespace EMap.MapServer.Ogc.Services
 {
     public interface IWfsService2 : IOgcService
     {

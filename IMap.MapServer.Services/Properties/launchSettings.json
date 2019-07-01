@@ -13,15 +13,15 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       //"launchUrl": "api/values",
-      "launchUrl": "IMap.MapServer/Services/%E6%B5%8B%E8%AF%95%E5%9C%B0%E5%9B%BE/MapServer/Wmts/1.0.0/WMTSCapabilities.xml",
+      "launchUrl": "EMap.MapServer/Services/%E6%B5%8B%E8%AF%95%E5%9C%B0%E5%9B%BE/MapServer/Wmts/1.0.0/WMTSCapabilities.xml",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "IMap.MapServer.Services": {
+    "EMap.MapServer.Services": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "IMap.MapServer/Services/%E6%B5%8B%E8%AF%95%E5%9C%B0%E5%9B%BE/MapServer/Wmts/1.0.0/WMTSCapabilities.xml",
+      "launchUrl": "EMap.MapServer/Services/%E6%B5%8B%E8%AF%95%E5%9C%B0%E5%9B%BE/MapServer/Wmts/1.0.0/WMTSCapabilities.xml",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

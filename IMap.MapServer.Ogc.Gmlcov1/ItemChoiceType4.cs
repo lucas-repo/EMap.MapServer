@@ -1,4 +1,4 @@
-﻿namespace IMap.MapServer.Ogc.Gmlcov {
+﻿namespace EMap.MapServer.Ogc.Gmlcov {
     
     
     

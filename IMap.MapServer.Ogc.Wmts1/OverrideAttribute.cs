@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IMap.MapServer.Ogc.Wmts1
+namespace EMap.MapServer.Ogc.Wmts1
 {
     public class OverrideAttribute
     {

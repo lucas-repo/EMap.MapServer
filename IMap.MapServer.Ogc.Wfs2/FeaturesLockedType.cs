@@ -1,6 +1,6 @@
-﻿using IMap.MapServer.Ogc.Fes2;
+﻿using EMap.MapServer.Ogc.Fes2;
 
-namespace IMap.MapServer.Ogc.Wfs2 {
+namespace EMap.MapServer.Ogc.Wfs2 {
     
     
     

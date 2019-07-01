@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IMap.MapServer.Ogc.Services\IMap.MapServer.Ogc.Services.csproj" />
+    <ProjectReference Include="..\IMap.MapServer.Ogc.Services\EMap.MapServer.Ogc.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

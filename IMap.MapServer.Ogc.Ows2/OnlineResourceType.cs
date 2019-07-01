@@ -1,6 +1,6 @@
-﻿using IMap.MapServer.Xlink;
+﻿using EMap.MapServer.Xlink;
 
-namespace IMap.MapServer.Ogc.Ows2 {
+namespace EMap.MapServer.Ogc.Ows2 {
     
     
     

@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using IMap.MapServer.DotSpatial;
-using IMap.MapServer.Ogc.Ows1_1;
-using IMap.MapServer.Ogc.Services;
-using IMap.MapServer.Ogc.Services.Gdals;
-using IMap.MapServer.Ogc.Wmts1;
-using IMap.MapServer.Services.Models;
+using EMap.MapServer.DotSpatial;
+using EMap.MapServer.Ogc.Ows1_1;
+using EMap.MapServer.Ogc.Services;
+using EMap.MapServer.Ogc.Services.Gdals;
+using EMap.MapServer.Ogc.Wmts1;
+using EMap.MapServer.Services.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,7 +13,7 @@ using System.Reflection;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace IMap.MapServer.Creator
+namespace EMap.MapServer.Creator
 {
     class Program
     {
@@ -101,7 +101,7 @@ namespace IMap.MapServer.Creator
             #endregion
             string href = "http://123";
             #region ServiceProvider
-            string poroviderName = "IMap.MapServer";
+            string poroviderName = "EMap.MapServer";
             OnlineResourceType providerSiteType = new OnlineResourceType()
             {
                 href = href

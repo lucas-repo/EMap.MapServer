@@ -1,7 +1,7 @@
-﻿using IMap.MapServer.Isotc211.Gco;
-using IMap.MapServer.Isotc211.Gts;
+﻿using EMap.MapServer.Isotc211.Gco;
+using EMap.MapServer.Isotc211.Gts;
 
-namespace IMap.MapServer.Isotc211.Gmd {
+namespace EMap.MapServer.Isotc211.Gmd {
     
     
     

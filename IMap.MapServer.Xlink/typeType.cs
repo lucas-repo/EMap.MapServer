@@ -1,4 +1,4 @@
-﻿namespace IMap.MapServer.Xlink {
+﻿namespace EMap.MapServer.Xlink {
     
     
     

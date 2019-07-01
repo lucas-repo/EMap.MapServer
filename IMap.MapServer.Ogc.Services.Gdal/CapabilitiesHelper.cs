@@ -1,12 +1,12 @@
-﻿using IMap.MapServer.Ogc.Ows1_1;
-using IMap.MapServer.Ogc.Wmts1;
+﻿using EMap.MapServer.Ogc.Ows1_1;
+using EMap.MapServer.Ogc.Wmts1;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace IMap.MapServer.Ogc.Services.Gdals
+namespace EMap.MapServer.Ogc.Services.Gdals
 {
     public static class CapabilitiesHelper
     {

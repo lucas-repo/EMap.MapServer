@@ -1,4 +1,4 @@
-﻿namespace IMap.MapServer.Ogc.Ows1_1 {
+﻿namespace EMap.MapServer.Ogc.Ows1_1 {
 
 
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(DatasetDescriptionSummaryBaseType))]

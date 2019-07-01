@@ -1,4 +1,4 @@
-﻿namespace IMap.MapServer.Ogc.Gml {
+﻿namespace EMap.MapServer.Ogc.Gml {
     
     
     /// <remarks/>

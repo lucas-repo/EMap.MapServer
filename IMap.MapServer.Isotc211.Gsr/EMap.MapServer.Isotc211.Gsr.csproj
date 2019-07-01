@@ -13,13 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IMap.MapServer.Xlink\IMap.MapServer.Xlink.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="netstandard">
-      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\netstandard.library\2.0.3\build\netstandard2.0\ref\netstandard.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\IMap.MapServer.Ogc.Gml\EMap.MapServer.Ogc.Gml.csproj" />
   </ItemGroup>
 
 </Project>

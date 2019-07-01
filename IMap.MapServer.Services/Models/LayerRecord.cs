@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace IMap.MapServer.Services.Models
+namespace EMap.MapServer.Services.Models
 {
     public class LayerRecord:NameRecord
     {

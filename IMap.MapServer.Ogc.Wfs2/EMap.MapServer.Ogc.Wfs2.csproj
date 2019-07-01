@@ -13,9 +13,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IMap.MapServer.Ogc.Gmlcov1\IMap.MapServer.Ogc.Gmlcov1.csproj" />
-    <ProjectReference Include="..\IMap.MapServer.Ogc.Ows2\IMap.MapServer.Ogc.Ows2.csproj" />
-    <ProjectReference Include="..\IMap.MapServer.Ogc.Swe2\IMap.MapServer.Ogc.Swe2.csproj" />
+    <ProjectReference Include="..\IMap.MapServer.Ogc.Fes2\EMap.MapServer.Ogc.Fes2.csproj" />
+    <ProjectReference Include="..\IMap.MapServer.Ogc.Ows1_1\EMap.MapServer.Ogc.Ows1_1.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using IMap.MapServer.Services.Models;
+using EMap.MapServer.Services.Models;
 
-namespace IMap.MapServer.Services.Migrations
+namespace EMap.MapServer.Services.Migrations
 {
     [DbContext(typeof(ConfigContext))]
     partial class ConfigContextModelSnapshot : ModelSnapshot
@@ -15,7 +15,7 @@ namespace IMap.MapServer.Services.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.11-servicing-32099");
 
-            modelBuilder.Entity("IMap.MapServer.Services.Models.Layer", b =>
+            modelBuilder.Entity("EMap.MapServer.Services.Models.Layer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -33,7 +33,7 @@ namespace IMap.MapServer.Services.Migrations
                     b.ToTable("Layers");
                 });
 
-            modelBuilder.Entity("IMap.MapServer.Services.Models.Service", b =>
+            modelBuilder.Entity("EMap.MapServer.Services.Models.Service", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -51,9 +51,9 @@ namespace IMap.MapServer.Services.Migrations
                     b.ToTable("Services");
                 });
 
-            modelBuilder.Entity("IMap.MapServer.Services.Models.Layer", b =>
+            modelBuilder.Entity("EMap.MapServer.Services.Models.Layer", b =>
                 {
-                    b.HasOne("IMap.MapServer.Services.Models.Service", "Service")
+                    b.HasOne("EMap.MapServer.Services.Models.Service", "Service")
                         .WithMany()
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade);

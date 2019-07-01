@@ -1,6 +1,6 @@
-﻿using IMap.MapServer.Ogc.Gml;
+﻿using EMap.MapServer.Ogc.Gml;
 
-namespace IMap.MapServer.Ogc.Wmts1
+namespace EMap.MapServer.Ogc.Wmts1
 {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]

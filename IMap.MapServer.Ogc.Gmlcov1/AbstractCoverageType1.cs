@@ -1,7 +1,7 @@
-﻿using IMap.MapServer.Ogc.Gml3_2;
-using IMap.MapServer.Ogc.Swe2;
+﻿using EMap.MapServer.Ogc.Gml3_2;
+using EMap.MapServer.Ogc.Swe2;
 
-namespace IMap.MapServer.Ogc.Gmlcov
+namespace EMap.MapServer.Ogc.Gmlcov
 {
 
 

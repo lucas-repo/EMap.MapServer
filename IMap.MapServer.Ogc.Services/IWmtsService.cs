@@ -1,7 +1,7 @@
-﻿using IMap.MapServer.Ogc.Wmts1;
+﻿using EMap.MapServer.Ogc.Wmts1;
 using System.IO;
 
-namespace IMap.MapServer.Ogc.Services
+namespace EMap.MapServer.Ogc.Services
 {
     public interface IWmtsService:IOgcService
     {

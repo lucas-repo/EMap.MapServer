@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace IMap.MapServer.Ogc.Swe2 {
+namespace EMap.MapServer.Ogc.Swe2 {
     
     
     

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using IMap.MapServer.Services.Models;
+using EMap.MapServer.Services.Models;
 
-namespace IMap.MapServer.Services.Controllers
+namespace EMap.MapServer.Services.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

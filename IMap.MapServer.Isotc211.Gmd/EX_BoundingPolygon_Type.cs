@@ -1,6 +1,6 @@
-﻿using IMap.MapServer.Isotc211.Gss;
+﻿using EMap.MapServer.Isotc211.Gss;
 
-namespace IMap.MapServer.Isotc211.Gmd {
+namespace EMap.MapServer.Isotc211.Gmd {
     
     
     

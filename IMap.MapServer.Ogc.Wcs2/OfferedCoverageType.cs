@@ -1,6 +1,6 @@
-﻿using IMap.MapServer.Ogc.Gmlcov;
+﻿using EMap.MapServer.Ogc.Gmlcov;
 
-namespace IMap.MapServer.Ogc.Wcs2 {
+namespace EMap.MapServer.Ogc.Wcs2 {
     
     
     

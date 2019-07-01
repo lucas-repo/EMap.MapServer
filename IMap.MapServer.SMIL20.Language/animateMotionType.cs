@@ -1,4 +1,4 @@
-﻿namespace IMap.MapServer.SMIL20.Language {
+﻿namespace EMap.MapServer.SMIL20.Language {
     
     
     

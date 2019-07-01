@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -13,9 +13,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IMap.MapServer.Extensions\IMap.MapServer.Extensions.csproj" />
-    <ProjectReference Include="..\IMap.MapServer.Ogc.Wfs2\IMap.MapServer.Ogc.Wfs2.csproj" />
-    <ProjectReference Include="..\IMap.MapServer.Ogc.Wmts1\IMap.MapServer.Ogc.Wmts1.csproj" />
+    <ProjectReference Include="..\IMap.MapServer.Ogc.Gml\EMap.MapServer.Ogc.Gml.csproj" />
+    <ProjectReference Include="..\IMap.MapServer.Ogc.Ows1_1\EMap.MapServer.Ogc.Ows1_1.csproj" />
   </ItemGroup>
 
   <ItemGroup>

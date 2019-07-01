@@ -1,6 +1,6 @@
-﻿using IMap.MapServer.Xlink;
+﻿using EMap.MapServer.Xlink;
 
-namespace IMap.MapServer.Isotc211.Gco {
+namespace EMap.MapServer.Isotc211.Gco {
     
     
     

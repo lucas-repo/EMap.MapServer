@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace IMap.MapServer.Services.Migrations
+namespace EMap.MapServer.Services.Migrations
 {
     public partial class InitialCreate : Migration
     {

@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "IMap.MapServer.Creator": {
+    "EMap.MapServer.Creator": {
       "commandName": "Project"
     }
   }

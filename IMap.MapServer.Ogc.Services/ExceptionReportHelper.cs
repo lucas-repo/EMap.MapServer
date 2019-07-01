@@ -1,9 +1,9 @@
-﻿using IMap.MapServer.Ogc.Ows1_1;
+﻿using EMap.MapServer.Ogc.Ows1_1;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IMap.MapServer.Ogc.Services
+namespace EMap.MapServer.Ogc.Services
 {
     public static class ExceptionReportHelper
     {

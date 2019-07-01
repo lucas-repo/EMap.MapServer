@@ -1,4 +1,4 @@
-﻿namespace IMap.MapServer.Services.Models
+﻿namespace EMap.MapServer.Services.Models
 {
     public class NameRecord:BaseRecord
     {

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using IMap.MapServer.Ogc.Wmts1;
+using EMap.MapServer.Ogc.Wmts1;
 using OSGeo.GDAL;
 using OSGeo.OGR;
-using IMap.MapServer.Ogc.Ows1_1;
+using EMap.MapServer.Ogc.Ows1_1;
 using System.IO;
 using System.Linq;
 
-namespace IMap.MapServer.Ogc.Services.Gdals
+namespace EMap.MapServer.Ogc.Services.Gdals
 {
     public class GdalWmtsService : WmtsService, IGdalWmtsService
     {

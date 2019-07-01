@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace IMap.MapServer.Services
+namespace EMap.MapServer.Services
 {
     public class Program
     {

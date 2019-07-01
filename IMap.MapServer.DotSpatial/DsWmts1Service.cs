@@ -2,9 +2,9 @@
 using DotSpatial.Data;
 using DotSpatial.Data.Rasters.GdalExtension;
 using DotSpatial.Symbology;
-using IMap.MapServer.Ogc.Ows1_1;
-using IMap.MapServer.Ogc.Services;
-using IMap.MapServer.Ogc.Wmts1;
+using EMap.MapServer.Ogc.Ows1_1;
+using EMap.MapServer.Ogc.Services;
+using EMap.MapServer.Ogc.Wmts1;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -12,7 +12,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 
-namespace IMap.MapServer.DotSpatial
+namespace EMap.MapServer.DotSpatial
 {
     public class DsWmts1Service : WmtsService, IDsWmts1Service
     {

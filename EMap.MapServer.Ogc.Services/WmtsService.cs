@@ -321,7 +321,8 @@ namespace EMap.MapServer.Ogc.Services
             XmlElementAttribute layerAttr = new XmlElementAttribute
             {
                 ElementName = "Layer",
-                Type = typeof(LayerType)
+                Type = typeof(LayerType),
+                Namespace = "http://www.opengis.net/wmts/1.0"
             };
             ddsAttrs.XmlElements.Add(layerAttr);
             attrOverrides.Add(typeof(ContentsBaseType), "DatasetDescriptionSummary", ddsAttrs);

@@ -10,19 +10,18 @@ using System.Text;
 using System.Threading.Tasks;
 using EMap.MapServer.Extensions;
 using EMap.MapServer.Ogc.Services;
+using Microsoft.AspNetCore.Hosting;
 
 namespace EMap.MapServer.Services.Controllers
 {
     //[Route("api/[controller]")]
-    [Route("EMap.MapServer/Services/{serviceName}/MapServer/Wmts")]
+    [Route("EMap/Services/{serviceName}/MapServer/Wmts")]
     [ApiController]
-    public class WmtsController : BaseController
+    public class WmtsController : BaseApiController
     {
         protected Encoding Encoding { get; } = Encoding.UTF8;
-        protected ConfigContext ConfigContext { get; private set; }
-        public WmtsController(ConfigContext configContext)
+        public WmtsController(IHostingEnvironment environment, ConfigContext configContext):base(environment,configContext)
         {
-            ConfigContext = configContext;
         }
         #region private functions   
         private async Task<ContentResult> GetCapabilities(string serviceName, GetCapabilities getCapabilities)
@@ -543,13 +542,13 @@ namespace EMap.MapServer.Services.Controllers
         #endregion
         protected IWmtsService GetWmts1Service(string version = "1.0.0")
         {
-            string serviceType = "WMTS";
+            OgcServiceType serviceType =  OgcServiceType.Wmts;
             IWmtsService wmts1Service = OgcServiceHelper.GetOgcService(serviceType, version) as IWmtsService;
             return wmts1Service;
         }
         protected async Task<ServiceRecord> GetServiceRecord(string serviceName, string version)
         {
-            ServiceRecord serviceRecord = await ConfigContext.Services.FirstOrDefaultAsync(x => x.Name == serviceName && x.Version == version && x.Type.ToLower() == "wmts");
+            ServiceRecord serviceRecord = await ConfigContext.Services.FirstOrDefaultAsync(x => x.Name == serviceName && x.Version == version && x.Type== OgcServiceType.Wmts);
             return serviceRecord;
         }
         protected async Task<LayerRecord> GetLayerRecord(string serviceName, string version, string layerName)

@@ -1,4 +1,6 @@
-﻿namespace EMap.MapServer.Services.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace EMap.MapServer.Services.Models
 {
     public abstract class BaseRecord
     {

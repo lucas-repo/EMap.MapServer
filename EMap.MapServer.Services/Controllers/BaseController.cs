@@ -1,18 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using EMap.MapServer.Services.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EMap.MapServer.Services.Controllers
 {
-    public abstract class BaseController : ControllerBase, IDisposable
+    public abstract class BaseController : Controller
     {
-       
-        public virtual void Dispose()
+        protected IHostingEnvironment HostingEnvironment { get; }
+        protected ConfigContext ConfigContext { get; set; }
+        protected ServicePathManager ServicePathManager { get; }
+        public BaseController(IHostingEnvironment environment, ConfigContext configContext)
         {
-            //if (ConfigContext != null)
-            //{
-            //    ConfigContext.Dispose();
-            //    ConfigContext = null;
-            //}
+            GdalHelper.GdalConfigure();
+            HostingEnvironment = environment;
+            ConfigContext = configContext;
+            ServicePathManager = new ServicePathManager(HostingEnvironment.ContentRootPath, ConfigContext);
         }
     }
 }

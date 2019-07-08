@@ -75,7 +75,14 @@ namespace EMap.MapServer.Services
             }
 
             app.UseHttpsRedirection();
-            app.UseMvc();
+            app.UseStaticFiles();
+            //app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Services}/{action=Index}/{id?}");
+            });
         }
     }
 }

@@ -17,8 +17,8 @@ namespace EMap.MapServer.Ogc.Services.Gdals
             {
                 throw new Exception("argout参数不正确");
             }
-            x = affineCoefficients[0] + affineCoefficients[1] * col + affineCoefficients[2] * row;
-            y = affineCoefficients[3] + affineCoefficients[4] * col + affineCoefficients[5] * row;
+            x = affineCoefficients[0] + affineCoefficients[1] * col + affineCoefficients[2] * row; 
+             y = affineCoefficients[3] + affineCoefficients[4] * col + affineCoefficients[5] * row;
         }
         public static void GetExtent(this Dataset dataset, out double xMin, out double yMin, out double xMax, out double yMax)
         {

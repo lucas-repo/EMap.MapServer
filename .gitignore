@@ -259,3 +259,4 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/EMap.MapServer.Services/Services/Wmts/1.0.0/测试服务

@@ -13,7 +13,7 @@ namespace EMap.MapServer.Services.Controllers
 {
     public class ServicesController : BaseController
     {
-        public ServicesController(IHostingEnvironment environment, ConfigContext configContext) :base(environment, configContext)
+        public ServicesController(IHostingEnvironment environment, ConfigContext configContext) : base(environment, configContext)
         {
         }
 
@@ -30,15 +30,10 @@ namespace EMap.MapServer.Services.Controllers
             {
                 return NotFound();
             }
-
-            var serviceRecord = await ConfigContext.Services
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (serviceRecord == null)
-            {
-                return NotFound();
-            }
-
-            return View(serviceRecord);
+            List<LayerRecord> layerRecords = await (from layerRecord in ConfigContext.Layers
+                                                    join serviceRecord in ConfigContext.Services on layerRecord.ServiceId equals serviceRecord.Id
+                                                    select layerRecord).ToListAsync();
+            return View(layerRecords);
         }
 
         // GET: Services/Create
@@ -55,9 +50,7 @@ namespace EMap.MapServer.Services.Controllers
         {
             if (ModelState.IsValid)
             {
-                string href = Request.Host.ToString();
-                OgcServiceHelper OgcServiceHelper = new OgcServiceHelper(ConfigContext, ServicePathManager, href);
-                bool ret =await OgcServiceHelper.CreateCapabilities(serviceRecord.Type, serviceRecord.Version, serviceRecord.Name);
+                bool ret = await OgcServiceHelper.CreateCapabilities(serviceRecord.Type, serviceRecord.Version, serviceRecord.Name);
                 if (ret)
                 {
                     return RedirectToAction(nameof(Index));

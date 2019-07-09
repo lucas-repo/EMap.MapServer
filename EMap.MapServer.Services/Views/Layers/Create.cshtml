@@ -3,31 +3,29 @@
 @{
     ViewData["Title"] = "Create";
 }
-
 <h2>Create</h2>
 
 <h4>LayerRecord</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form id="uploadForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Path" class="control-label"></label>
-                <input asp-for="Path" class="form-control" />
-                <span asp-validation-for="Path" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="ServiceId" class="control-label"></label>
-                <select asp-for="ServiceId" class ="form-control" asp-items="ViewBag.ServiceId"></select>
+                <select id="serviceSelect" asp-for="ServiceId" class="form-control" asp-items="ViewBag.ServiceId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+                <label asp-for="Name" class="control-label" />
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <label class="control-label">选择数据</label>
+                <input id="fileUpload" type="file" name="files" multiple />
+            </div>
+            <div class="form-group">
+                <input type="button" value="上传" class="btn btn-default" onclick="doUpload()" />
             </div>
         </form>
     </div>
@@ -39,4 +37,45 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+    function doUpload() {
+        var layerName = $("#fileUpload").val();
+        var serviceId = $("#serviceSelect").val();
+        $.ajax({
+            url: '@Url.Action("ValidateLayerName")',
+            type: 'GET',
+            data: {
+                serviceId: serviceId,
+                layerName:layerName
+            },
+            success: function (data) {
+                if (data != null&&data!="") {
+                    alert("上传失败："+data);
+                }
+                else {
+                    var formData = new FormData($("#uploadForm")[0]);
+                    console.log(formData);
+                    $.ajax({
+                        url: '@Url.Action("Upload")',
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            if (data != null&&data!="") {
+                                alert("返回值"+data);
+                            }
+                        },
+                        error: function (data) {
+                            alert("返回值1"+data);
+                        }
+                    });
+                }
+            },
+            error: function (data) {
+                alert("上传失败："+data);
+            }
+        });
+        }
+    </script>
 }

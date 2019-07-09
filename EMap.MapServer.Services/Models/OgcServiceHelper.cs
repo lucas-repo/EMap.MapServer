@@ -2,6 +2,8 @@
 using EMap.MapServer.Ogc.Services;
 using EMap.MapServer.Ogc.Services.Gdals;
 using EMap.MapServer.Ogc.Wmts1;
+using EMap.MapServer.Services.Controllers;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -23,10 +25,21 @@ namespace EMap.MapServer.Services.Models
             _servicePathManager = servicePathManager;
             _host = host;
         }
+        private string GetRoutTemplate<T>() where T : ControllerBase
+        {
+            Type type = typeof(T);
+            object[] attributes = type.GetCustomAttributes(typeof(RouteAttribute), false);
+            string routTemplate = null;
+            if (attributes.Length > 0 && attributes[0] is RouteAttribute routeAttribute)
+            {
+                routTemplate = routeAttribute.Template;
+            }
+            return routTemplate;
+        }
         public async Task<bool> CreateCapabilities(OgcServiceType serviceType, string serviceVersion, string serviceName)
         {
             bool ret = false;
-            if (_configContext == null || _servicePathManager == null  || string.IsNullOrEmpty(serviceVersion) || string.IsNullOrEmpty(serviceName) || string.IsNullOrEmpty(_host))
+            if (_configContext == null || _servicePathManager == null || string.IsNullOrEmpty(serviceVersion) || string.IsNullOrEmpty(serviceName) || string.IsNullOrEmpty(_host))
             {
                 Debug.WriteLine("参数不能为空");
                 return ret;
@@ -45,7 +58,10 @@ namespace EMap.MapServer.Services.Models
             IOgcService ogcService = GetOgcService(serviceType, serviceVersion);
             if (ogcService is IWmtsService wmtsService)
             {
-                string href = $"{_host}/EMap/Services/{serviceName}/MapServer/Wmts";
+                string routTemplate = GetRoutTemplate<WmtsController>();
+                routTemplate = routTemplate.Replace("{serviceName}", serviceName);
+                string href = $"{_host}/{routTemplate}";
+                //string href = $"{_host}/EMap/Services/{serviceName}/MapServer/Wmts";
                 Capabilities capabilities = wmtsService.CreateCapabilities(href);
                 servicePath = Path.Combine(serviceDirectory, "WMTSCapabilities.xml");
                 using (StreamWriter sw = new StreamWriter(servicePath))
@@ -72,13 +88,13 @@ namespace EMap.MapServer.Services.Models
         public static IOgcService GetOgcService(OgcServiceType serviceType, string serviceVersion)
         {
             IOgcService ogcService = null;
-            if ( string.IsNullOrWhiteSpace(serviceVersion))
+            if (string.IsNullOrWhiteSpace(serviceVersion))
             {
                 return ogcService;
             }
             switch (serviceType)
             {
-                case  OgcServiceType.Wfs:
+                case OgcServiceType.Wfs:
                     switch (serviceVersion)
                     {
                         case "2.0.0":

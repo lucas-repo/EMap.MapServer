@@ -13,6 +13,19 @@ namespace EMap.MapServer.Services.Controllers
         protected IHostingEnvironment HostingEnvironment { get; }
         protected ConfigContext ConfigContext { get; set; }
         protected ServicePathManager ServicePathManager { get; }
+        private OgcServiceHelper _ogcServiceHelper;
+        protected OgcServiceHelper OgcServiceHelper
+        {
+            get
+            {
+                if (_ogcServiceHelper == null)
+                {
+                    string href = Request.Host.Host;
+                    _ogcServiceHelper = new OgcServiceHelper(ConfigContext, ServicePathManager, href);
+                }
+                return _ogcServiceHelper;
+            }
+        }
         public BaseController(IHostingEnvironment environment, ConfigContext configContext)
         {
             GdalHelper.GdalConfigure();

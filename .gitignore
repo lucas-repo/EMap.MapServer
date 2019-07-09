@@ -260,3 +260,4 @@ paket-files/
 __pycache__/
 *.pyc
 /EMap.MapServer.Services/Services/Wmts/1.0.0/测试服务
+/EMap.MapServer.Services/Services/Wmts/1.0.0/测试222

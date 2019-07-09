@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore.Sqlite;
 using System;
 using System.Reflection;
 using System.IO;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace EMap.MapServer.Services
 {
@@ -60,6 +61,10 @@ namespace EMap.MapServer.Services
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             var connection = Configuration.GetConnectionString("ConfigContext");
             services.AddDbContext<ConfigContext>(options => options.UseSqlite(connection));
+            services.Configure<FormOptions>(options =>
+            {
+                options.MultipartBodyLengthLimit = 4L*1024*1024*1024;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

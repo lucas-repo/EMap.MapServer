@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using EMap.MapServer.Services.Models;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using Microsoft.Extensions.Primitives;
+using EMap.MapServer.Ogc.Services;
+using EMap.MapServer.Ogc.Services.Gdals;
 
 namespace EMap.MapServer.Services.Controllers
 {
@@ -197,30 +200,74 @@ namespace EMap.MapServer.Services.Controllers
             return error;
         }
         [HttpPost]
-        public async Task<IActionResult> Upload( )
+        public async Task<string> Upload( )
         {
+            string error = null;
             var files = Request.Form.Files;
             long size = files.Sum(f => f.Length);
-
-            //ServicePathManager.GetCapabilitiesPath()
-            //string webRootPath = _hostingEnvironment.WebRootPath;
-            //string contentRootPath = _hostingEnvironment.ContentRootPath;
-            //foreach (var formFile in files)
-            //{
-            //    if (formFile.Length > 0)
-            //    {
-            //        string fileExt = GetFileExt(formFile.FileName); //文件扩展名，不含“.”
-            //        long fileSize = formFile.Length; //获得文件大小，以字节为单位
-            //        string newFileName = System.Guid.NewGuid().ToString() + "." + fileExt; //随机生成新的文件名
-            //        var filePath = webRootPath + "/upload/" + newFileName;
-            //        using (var stream = new FileStream(filePath, FileMode.Create))
-            //        {
-            //            await formFile.CopyToAsync(stream);
-            //        }
-            //    }
-            //}
-
-            return RedirectToAction(nameof(Index));
+            if (!Request.Form.ContainsKey("ServiceId"))
+            {
+                error = "参数未包含ServiceId";
+                return error;
+            }
+            StringValues values = Request.Form["ServiceId"];
+            if (values.Count == 0)
+            {
+                error = "参数未包含ServiceId";
+                return error;
+            }
+            bool ret = int.TryParse(values[0], out int serviceId);
+            if (!ret)
+            {
+                error = "ServiceId错误";
+                return error;
+            }
+            ServiceRecord serviceRecord = await ConfigContext.Services.FindAsync(serviceId);
+            if (serviceRecord == null)
+            {
+                error = "未找到指定的服务";
+                return error;
+            }
+            string capabilitiesPath = ServicePathManager.GetCapabilitiesPath(serviceRecord.Type, serviceRecord.Version, serviceRecord.Name);
+            if (!System.IO.File.Exists(capabilitiesPath))
+            {
+                error = "服务器内部错误：未找到元数据";
+                return error;
+            }
+            string destDirectory = ServicePathManager.GetServiceDirectory(serviceRecord.Type, serviceRecord.Version, serviceRecord.Name);
+            string tempDirectory = ServicePathManager.GetTempDirectory();
+            if (!Directory.Exists(tempDirectory))
+            {
+                Directory.CreateDirectory(tempDirectory);
+            }
+            Dictionary<string, string> layerPathDic = new Dictionary<string, string>();
+            foreach (var formFile in files)
+            {
+                if (formFile.Length > 0)
+                {
+                    string nameWithExtension = Path.GetFileName(formFile.FileName);
+                    string name = Path.GetFileNameWithoutExtension(formFile.FileName);
+                    string tempLayerPath = Path.Combine(tempDirectory, nameWithExtension);
+                    using (var stream =System.IO.File.Create(tempLayerPath))
+                    {
+                        await formFile.CopyToAsync(stream);
+                        ret = OgcServiceHelper.AddLayerToCapabilities(serviceRecord.Type, serviceRecord.Version, capabilitiesPath, tempLayerPath);
+                        if (ret)
+                        {
+                            string destLayerPath = Path.Combine(destDirectory, nameWithExtension);
+                            System.IO.File.Move(tempLayerPath, destLayerPath);
+                            LayerRecord layerRecord = new LayerRecord()
+                            {
+                                Name = name,
+                                Path = destLayerPath,
+                                Service = serviceRecord
+                            };
+                        }
+                    }
+                }
+            }
+            int result = await ConfigContext.SaveChangesAsync();
+            return error;
         }
         private bool LayerRecordExists(int id)
         {

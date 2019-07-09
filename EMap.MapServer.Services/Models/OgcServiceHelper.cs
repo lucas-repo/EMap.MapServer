@@ -85,6 +85,35 @@ namespace EMap.MapServer.Services.Models
             ret = true;
             return ret;
         }
+        public bool AddLayerToCapabilities(OgcServiceType serviceType, string serviceVersion, string capabilitiesPath, string layerPath)
+        {
+            bool ret = false;
+            IOgcService ogcService = GetOgcService(serviceType, serviceVersion);
+            switch (serviceType)
+            {
+                case OgcServiceType.Wmts:
+                    IWmtsService wmtsService = ogcService as IWmtsService;
+                    Capabilities capabilities = null;
+                    using (StreamReader sr = new StreamReader(capabilitiesPath))
+                    {
+                         capabilities = wmtsService.XmlDeSerialize(sr);
+                    }
+                    if (capabilities != null)
+                    {
+                        LayerType layerType = wmtsService.AddContent(capabilities, layerPath);
+                        if (layerType != null)
+                        {
+                            using (StreamWriter sw = new StreamWriter(capabilitiesPath))
+                            {
+                                 wmtsService.XmlSerialize(sw, capabilities);
+                            }
+                            ret = true;
+                        }
+                    }
+                    break;
+            }
+            return ret;
+        }
         public static IOgcService GetOgcService(OgcServiceType serviceType, string serviceVersion)
         {
             IOgcService ogcService = null;

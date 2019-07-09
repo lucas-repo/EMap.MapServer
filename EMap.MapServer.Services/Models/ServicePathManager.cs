@@ -19,6 +19,10 @@ namespace EMap.MapServer.Services.Models
         {
             return Path.Combine(RootPath, "Services");
         }
+        public string GetTempDirectory()
+        {
+            return Path.Combine(RootPath, "Temp");
+        }
         public string GetServiceTypeDirectory(OgcServiceType serviceType)
         {
             string directory = GetServicesDirectory();

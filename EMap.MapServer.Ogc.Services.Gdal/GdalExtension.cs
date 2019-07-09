@@ -84,10 +84,8 @@ namespace EMap.MapServer.Ogc.Services.Gdals
         }
 
 
-        public static LayerType AddToCapabilities(this Dataset dataset, Capabilities capabilities)
+        public static LayerType AddToCapabilities(this Dataset dataset,string name, Capabilities capabilities)
         {
-            string fileName = dataset.GetDescription();//todo 需处理中文乱码
-            string name = Path.GetFileNameWithoutExtension(fileName);
             string projectionStr = dataset.GetProjection();
             dataset.GetExtent(out double xMin, out double yMin, out double xMax, out double yMax);
             LayerType layerType = CapabilitiesHelper.AddToCapabilities(capabilities, name, projectionStr, xMin, yMin, xMax, yMax);

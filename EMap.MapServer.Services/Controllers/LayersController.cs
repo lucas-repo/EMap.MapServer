@@ -11,6 +11,11 @@ using System.IO;
 using Microsoft.Extensions.Primitives;
 using EMap.MapServer.Ogc.Services;
 using EMap.MapServer.Ogc.Services.Gdals;
+using Microsoft.AspNetCore.Http;
+using System.IO.Compression;
+using OSGeo.GDAL;
+using OSGeo.OGR;
+using System.Diagnostics;
 
 namespace EMap.MapServer.Services.Controllers
 {
@@ -168,30 +173,32 @@ namespace EMap.MapServer.Services.Controllers
             await ConfigContext.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        public async Task<string> ValidateLayerName(int serviceId, string layerName)
+        public string ValidateLayerName(int serviceId, string layerName)
         {
             string error = null;
             string extention = Path.GetExtension(layerName);
             switch (extention)
             {
-                case ".shp":
-                case ".img":
-                case ".tif":
-                case ".jpg":
-                    ServiceRecord serviceRecord = await ConfigContext.Services.FindAsync(serviceId);
-                    if (serviceRecord == null)
-                    {
-                        error = "未找到服务";
-                    }
-                    else
-                    {
-                        string destName = Path.GetFileNameWithoutExtension(layerName);
-                        bool isExist = await ConfigContext.Layers.AnyAsync(x => x.ServiceId == serviceId && x.Name == destName);
-                        if (isExist)
-                        {
-                            error = "已存在同名的图层";
-                        }
-                    }
+                //case ".shp":
+                //case ".img":
+                //case ".tif":
+                //case ".jpg":
+                //    ServiceRecord serviceRecord = await ConfigContext.Services.FindAsync(serviceId);
+                //    if (serviceRecord == null)
+                //    {
+                //        error = "未找到服务";
+                //    }
+                //    else
+                //    {
+                //        string destName = Path.GetFileNameWithoutExtension(layerName);
+                //        bool isExist = await ConfigContext.Layers.AnyAsync(x => x.ServiceId == serviceId && x.Name == destName);
+                //        if (isExist)
+                //        {
+                //            error = "已存在同名的图层";
+                //        }
+                //    }
+                //    break;
+                case ".zip"://只接受.zip压缩文件
                     break;
                 default:
                     error = "不支持的数据格式";
@@ -200,10 +207,10 @@ namespace EMap.MapServer.Services.Controllers
             return error;
         }
         [HttpPost]
-        public async Task<string> Upload( )
+        public async Task<string> Upload([FromForm]IFormCollection formData)
         {
             string error = null;
-            var files = Request.Form.Files;
+            var files = formData.Files;
             long size = files.Sum(f => f.Length);
             if (!Request.Form.ContainsKey("ServiceId"))
             {
@@ -234,40 +241,126 @@ namespace EMap.MapServer.Services.Controllers
                 error = "服务器内部错误：未找到元数据";
                 return error;
             }
-            string destDirectory = ServicePathManager.GetServiceDirectory(serviceRecord.Type, serviceRecord.Version, serviceRecord.Name);
-            string tempDirectory = ServicePathManager.GetTempDirectory();
+            string tempDirectory = Path.GetTempPath();
             if (!Directory.Exists(tempDirectory))
             {
                 Directory.CreateDirectory(tempDirectory);
             }
-            Dictionary<string, string> layerPathDic = new Dictionary<string, string>();
             foreach (var formFile in files)
             {
                 if (formFile.Length > 0)
                 {
-                    string nameWithExtension = Path.GetFileName(formFile.FileName);
-                    string name = Path.GetFileNameWithoutExtension(formFile.FileName);
-                    string tempLayerPath = Path.Combine(tempDirectory, nameWithExtension);
-                    using (var stream =System.IO.File.Create(tempLayerPath))
+                    string zipNameWithExtension = Path.GetFileName(formFile.FileName);
+                    string zipName = Path.GetFileNameWithoutExtension(formFile.FileName);
+                    string tempZipPath = Path.Combine(tempDirectory, zipNameWithExtension);//zip临时路径
+                    using (var stream = System.IO.File.Create(tempZipPath))
                     {
                         await formFile.CopyToAsync(stream);
-                        ret = OgcServiceHelper.AddLayerToCapabilities(serviceRecord.Type, serviceRecord.Version, capabilitiesPath, tempLayerPath);
+                    }
+                    string tempZipDirectory = Path.Combine(tempDirectory, zipName);//zip临时解压目录
+                    ZipFile.ExtractToDirectory(tempZipPath, tempZipDirectory, true);
+                    List<string> supportFileNames = GetSupportFileNames(tempZipDirectory);
+                    string destDirectory = ServicePathManager.GetServiceDirectory(serviceRecord.Type, serviceRecord.Version, serviceRecord.Name);
+                    foreach (var supportFileName in supportFileNames)
+                    {
+                        ret = OgcServiceHelper.AddLayerToCapabilities(serviceRecord.Type, serviceRecord.Version, capabilitiesPath, supportFileName);
                         if (ret)
                         {
-                            string destLayerPath = Path.Combine(destDirectory, nameWithExtension);
-                            System.IO.File.Move(tempLayerPath, destLayerPath);
+                            string destNameWithExtension = Path.GetFileName(supportFileName);
+                            string destLayerPath = Path.Combine(destDirectory, destNameWithExtension);
+                            OgcServiceHelper.MoveFile(supportFileName, destLayerPath);
                             LayerRecord layerRecord = new LayerRecord()
                             {
-                                Name = name,
+                                Name = zipName,
                                 Path = destLayerPath,
                                 Service = serviceRecord
                             };
                         }
                     }
+                    Directory.Delete(tempZipDirectory);
+                    System.IO.File.Delete(tempZipPath);
                 }
             }
             int result = await ConfigContext.SaveChangesAsync();
             return error;
+        }
+        public static List<string> GetSupportRasterExtensions()
+        {
+            int driverCount = Gdal.GetDriverCount();
+            List<string> extensions = new List<string>();
+            for (int i = 0; i < driverCount; i++)
+            {
+                using (OSGeo.GDAL.Driver driver = Gdal.GetDriver(i))
+                {
+                    string[] metadata = driver.GetMetadata("");
+                    var str = metadata.FirstOrDefault(x => x.Contains("DMD_EXTENSION="));
+                    if (str != null)
+                    {
+                        var extension = str.Split('=')[1];
+                        bool isRaster = metadata.Any(x => x == "DCAP_RASTER=YES");
+                        extension = $".{extension}";
+                        if (!extensions.Contains(extension))
+                        {
+                            extensions.Add(extension);
+                        }
+                    }
+                }
+            }
+            return extensions;
+        }
+        private static List<string> GetSupportVectorExtensions()
+        {
+            int driverCount = Ogr.GetDriverCount();
+            List<string> extensions = new List<string>();
+            for (int i = 0; i < driverCount; i++)
+            {
+                using (OSGeo.OGR.Driver driver = Ogr.GetDriver(i))
+                {
+                }
+            }
+            return extensions;
+        }
+        public static List<string> GetSupportFileNames(string directory)
+        {
+            List<string> supportFileNames = new List<string>();
+            string[] files = Directory.GetFiles(directory);
+            List<string> rasterExtensions = GetSupportRasterExtensions();
+            List<string> vectorExtensions = new List<string>() { ".shp" };
+            foreach (var file in files)
+            {
+                string extension = Path.GetExtension(file);
+                try
+                {
+                    if (rasterExtensions.Contains(extension))
+                    {
+                        using (Dataset dataset = Gdal.Open(file, Access.GA_ReadOnly))
+                        {
+                            if (dataset == null)
+                            {
+                                continue;
+                            }
+                        }
+                    }
+                    else if (vectorExtensions.Contains(extension))
+                    {
+                        using (DataSource dataSource = Ogr.Open(file, 0))
+                        {
+                            if (dataSource == null)
+                            {
+                                continue;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                    supportFileNames.Add(file);
+                }
+                catch (Exception e)
+                { }
+            }
+            return supportFileNames;
         }
         private bool LayerRecordExists(int id)
         {

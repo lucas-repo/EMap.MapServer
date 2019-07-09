@@ -193,7 +193,7 @@ namespace EMap.MapServer.Ogc.Services.Gdals
                 tileMatrixSets = capabilities.Contents.TileMatrixSet;
                 int minLevel = 0;
                 int maxLevel = 20;
-                TileMatrix[] tileMatrices = GetTileMatrices(semimajor, xMin, yMin, xMax, yMax, minLevel, maxLevel); ;
+                TileMatrix[] tileMatrices = GetTileMatrices(semimajor, xMin, yMin, xMax, yMax, minLevel, maxLevel); 
                 TileMatrixSet tileMatrixSet = new TileMatrixSet()
                 {
                     Identifier = new CodeType()

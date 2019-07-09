@@ -28,7 +28,7 @@ namespace EMap.MapServer.Services.Models
             string directory = GetServicesDirectory();
             return Path.Combine(directory, serviceType.ToString());
         }
-        public string GetServiceVersionDirectory(OgcServiceType serviceType,string serviceVersion)
+        public string GetServiceVersionDirectory(OgcServiceType serviceType, string serviceVersion)
         {
             string directory = GetServiceTypeDirectory(serviceType);
             return Path.Combine(directory, serviceVersion);
@@ -39,10 +39,21 @@ namespace EMap.MapServer.Services.Models
             return Path.Combine(directory, serviceName);
         }
 
-        public string GetCapabilitiesPath(OgcServiceType serviceType, string serviceVersion,string serviceName)
+        public string GetCapabilitiesPath(OgcServiceType serviceType, string serviceVersion, string serviceName)
         {
-            string directory = GetServiceDirectory(serviceType, serviceVersion,  serviceName);
-            string path = Path.Combine(directory, $"{serviceName}.xml");
+            string directory = GetServiceDirectory(serviceType, serviceVersion, serviceName);
+            string name = null;
+            switch (serviceType)
+            {
+                case OgcServiceType.Wmts:
+                    name = "WMTSCapabilities.xml";
+                    break;
+            }
+            string path = null;
+            if (!string.IsNullOrEmpty(name))
+            {
+                path = Path.Combine(directory, name);
+            }
             return path;
         }
     }

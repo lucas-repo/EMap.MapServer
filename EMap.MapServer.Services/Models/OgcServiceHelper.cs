@@ -96,7 +96,7 @@ namespace EMap.MapServer.Services.Models
                     Capabilities capabilities = null;
                     using (StreamReader sr = new StreamReader(capabilitiesPath))
                     {
-                         capabilities = wmtsService.XmlDeSerialize(sr);
+                        capabilities = wmtsService.XmlDeSerialize(sr);
                     }
                     if (capabilities != null)
                     {
@@ -105,7 +105,7 @@ namespace EMap.MapServer.Services.Models
                         {
                             using (StreamWriter sw = new StreamWriter(capabilitiesPath))
                             {
-                                 wmtsService.XmlSerialize(sw, capabilities);
+                                wmtsService.XmlSerialize(sw, capabilities);
                             }
                             ret = true;
                         }
@@ -158,6 +158,35 @@ namespace EMap.MapServer.Services.Models
                     break;
             }
             return ogcService;
+        }
+        /// <summary>
+        /// 将文件移动至新的位置，将会移动所有相同名称不同后缀的文件
+        /// </summary>
+        /// <param name="srcFileName"></param>
+        /// <param name="destFileName"></param>
+        public static void MoveFile(string srcFileName, string destFileName)
+        {
+            try
+            {
+                if (File.Exists(srcFileName))
+                {
+                    string srcDirectory = Path.GetDirectoryName(srcFileName);
+                    string srcName = Path.GetFileNameWithoutExtension(srcFileName);
+                    string[] srcPathes = Directory.GetFiles(srcDirectory, $"{srcName}.");
+                    string destDirectory = Path.GetDirectoryName(destFileName);
+                    if (!Directory.Exists(destDirectory))
+                    {
+                        Directory.CreateDirectory(destDirectory);
+                    }
+                    foreach (var srcPath in srcPathes)
+                    {
+                        string nameWithExtension = Path.GetFileName(srcPath);
+                        string destPath = Path.Combine(destDirectory, nameWithExtension);
+                        File.Move(srcPath, destPath);
+                    }
+                }
+            }
+            catch { }
         }
     }
 }

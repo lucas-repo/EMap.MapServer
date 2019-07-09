@@ -22,10 +22,8 @@ namespace EMap.MapServer.Ogc.Services.Gdals
                 yMax = envelope.MaxY;
             }
         }
-        public static LayerType AddToCapabilities(this DataSource dataSource, Capabilities capabilities)
+        public static LayerType AddToCapabilities(this DataSource dataSource,string name, Capabilities capabilities)
         {
-            string fileName = dataSource.name;//todo 需处理中文乱码
-            string name = Path.GetFileNameWithoutExtension(fileName);
             string projectionStr;
             double xMin, yMin, xMax, yMax;
             using (var layer = dataSource.GetLayerByIndex(0))

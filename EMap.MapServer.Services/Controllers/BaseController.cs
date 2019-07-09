@@ -28,7 +28,6 @@ namespace EMap.MapServer.Services.Controllers
         }
         public BaseController(IHostingEnvironment environment, ConfigContext configContext)
         {
-            GdalHelper.GdalConfigure();
             HostingEnvironment = environment;
             ConfigContext = configContext;
             ServicePathManager = new ServicePathManager(HostingEnvironment.ContentRootPath, ConfigContext);

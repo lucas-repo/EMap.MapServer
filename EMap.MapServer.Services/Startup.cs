@@ -63,7 +63,8 @@ namespace EMap.MapServer.Services
             services.AddDbContext<ConfigContext>(options => options.UseSqlite(connection));
             services.Configure<FormOptions>(options =>
             {
-                options.MultipartBodyLengthLimit = 4L*1024*1024*1024;
+                options.ValueLengthLimit = int.MaxValue;
+                options.MultipartBodyLengthLimit = int.MaxValue; // In case of multipart
             });
         }
 

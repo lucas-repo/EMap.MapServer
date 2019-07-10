@@ -5,6 +5,8 @@ using EMap.MapServer.Ogc.Wmts1;
 using EMap.MapServer.Services.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using OSGeo.GDAL;
+using OSGeo.OGR;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -166,27 +168,56 @@ namespace EMap.MapServer.Services.Models
         /// <param name="destFileName"></param>
         public static void MoveFile(string srcFileName, string destFileName)
         {
-            try
+            if (File.Exists(srcFileName))
             {
-                if (File.Exists(srcFileName))
+                try
                 {
-                    string srcDirectory = Path.GetDirectoryName(srcFileName);
-                    string srcName = Path.GetFileNameWithoutExtension(srcFileName);
-                    string[] srcPathes = Directory.GetFiles(srcDirectory, $"{srcName}.");
-                    string destDirectory = Path.GetDirectoryName(destFileName);
-                    if (!Directory.Exists(destDirectory))
+                    OSGeo.GDAL.Driver driver = null;
+                    using (Dataset dataset = Gdal.Open(srcFileName, Access.GA_ReadOnly))
                     {
-                        Directory.CreateDirectory(destDirectory);
+                        driver = dataset?.GetDriver();
                     }
-                    foreach (var srcPath in srcPathes)
+                    if (driver != null)
                     {
-                        string nameWithExtension = Path.GetFileName(srcPath);
-                        string destPath = Path.Combine(destDirectory, nameWithExtension);
-                        File.Move(srcPath, destPath);
+                        driver.CopyFiles(destFileName, srcFileName);
+                        driver.Delete(srcFileName);
+                        driver.Dispose();
                     }
                 }
+                catch (Exception e)
+                {
+                    try
+                    {
+                        using (DataSource dataSource = Ogr.Open(srcFileName, 0))
+                        {
+                            if (dataSource != null)
+                            {
+                                using (OSGeo.OGR.Driver driver = dataSource.GetDriver())
+                                {
+                                    driver.CopyDataSource(dataSource, destFileName, null);
+                                    driver.DeleteDataSource(srcFileName);
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    { }
+                }
+                //string srcDirectory = Path.GetDirectoryName(srcFileName);
+                //string srcName = Path.GetFileNameWithoutExtension(srcFileName);
+                //string[] srcPathes = Directory.GetFiles(srcDirectory, $"{srcName}.");
+                //string destDirectory = Path.GetDirectoryName(destFileName);
+                //if (!Directory.Exists(destDirectory))
+                //{
+                //    Directory.CreateDirectory(destDirectory);
+                //}
+                //foreach (var srcPath in srcPathes)
+                //{
+                //    string nameWithExtension = Path.GetFileName(srcPath);
+                //    string destPath = Path.Combine(destDirectory, nameWithExtension);
+                //    File.Move(srcPath, destPath);
+                //}
             }
-            catch { }
         }
     }
 }

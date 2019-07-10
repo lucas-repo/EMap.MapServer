@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using EMap.MapServer.Services.Models;
 using EMap.MapServer.Ogc.Services;
 using Microsoft.AspNetCore.Hosting;
+using EMap.MapServer.Ogc.Wmts1;
+using System.IO;
 
 namespace EMap.MapServer.Services.Controllers
 {
@@ -134,6 +136,14 @@ namespace EMap.MapServer.Services.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var serviceRecord = await ConfigContext.Services.FindAsync(id);
+            if (serviceRecord == null)
+            {
+                return BadRequest("未找到要删除的服务");
+            }
+            string capabilitiesDirectory = ServicePathManager.GetServiceDirectory(serviceRecord.Type, serviceRecord.Version, serviceRecord.Name);
+            Directory.Delete(capabilitiesDirectory);
+            var layerRecords = ConfigContext.Layers.Where(x => x.ServiceId == id);
+            ConfigContext.Layers.RemoveRange(layerRecords);
             ConfigContext.Services.Remove(serviceRecord);
             await ConfigContext.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

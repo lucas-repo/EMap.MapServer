@@ -9,7 +9,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form  method="post" id="uploadForm" enctype="multipart/form-data" >
+        <form  method="post" id="uploadForm" enctype="multipart/form-data" asp-action="Upload">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="ServiceId" class="control-label"></label>
@@ -43,14 +43,15 @@
                 layerName:layerName
             },
             success: function (data) {
-                if (data != null&&data!="") {
-                    alert("上传失败："+data);
+                if (data != null && data != "") {
+                    alert("上传失败：" + data);
                 }
                 else {
                     var formData = new FormData($("#uploadForm")[0]);
-                    console.log(formData);
+                    var url = '@Url.Action("Upload")';
+                    console.log(url);
                     $.ajax({
-                        url: '@Url.Action("Upload")',
+                        url:url,
                         type: 'POST',
                         data: formData,
                         contentType: false,

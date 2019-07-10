@@ -23,7 +23,7 @@ namespace EMap.MapServer.Services
             Gdal.SetConfigOption("GDAL_FILENAME_IS_UTF8", "YES");
             // 为了使属性表字段支持中文，请添加下面这句  
             Gdal.SetConfigOption("SHAPE_ENCODING", "");
-            CreateWebHostBuilder(args).Build().Run();
+            CreateWebHostBuilder(args).Build().Run(); 
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

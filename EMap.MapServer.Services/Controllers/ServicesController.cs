@@ -141,7 +141,10 @@ namespace EMap.MapServer.Services.Controllers
                 return BadRequest("未找到要删除的服务");
             }
             string capabilitiesDirectory = ServicePathManager.GetServiceDirectory(serviceRecord.Type, serviceRecord.Version, serviceRecord.Name);
-            Directory.Delete(capabilitiesDirectory);
+            if (Directory.Exists(capabilitiesDirectory))
+            {
+                Directory.Delete(capabilitiesDirectory, true);
+            }
             var layerRecords = ConfigContext.Layers.Where(x => x.ServiceId == id);
             ConfigContext.Layers.RemoveRange(layerRecords);
             ConfigContext.Services.Remove(serviceRecord);

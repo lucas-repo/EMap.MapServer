@@ -16,6 +16,7 @@ using System.IO.Compression;
 using OSGeo.GDAL;
 using OSGeo.OGR;
 using System.Diagnostics;
+using System.Text;
 
 namespace EMap.MapServer.Services.Controllers
 {
@@ -207,7 +208,7 @@ namespace EMap.MapServer.Services.Controllers
             return error;
         }
         [HttpPost]
-        public async Task<string> Upload([FromForm]IFormCollection formData)
+        public async Task<IActionResult> Upload([FromForm]IFormCollection formData)
         {
             string error = null;
             var files = formData.Files;
@@ -215,31 +216,31 @@ namespace EMap.MapServer.Services.Controllers
             if (!Request.Form.ContainsKey("ServiceId"))
             {
                 error = "参数未包含ServiceId";
-                return error;
+                return BadRequest(error);
             }
             StringValues values = Request.Form["ServiceId"];
             if (values.Count == 0)
             {
                 error = "参数未包含ServiceId";
-                return error;
+                return BadRequest(error);
             }
             bool ret = int.TryParse(values[0], out int serviceId);
             if (!ret)
             {
                 error = "ServiceId错误";
-                return error;
+                return BadRequest(error);
             }
             ServiceRecord serviceRecord = await ConfigContext.Services.FindAsync(serviceId);
             if (serviceRecord == null)
             {
                 error = "未找到指定的服务";
-                return error;
+                return BadRequest(error);
             }
             string capabilitiesPath = ServicePathManager.GetCapabilitiesPath(serviceRecord.Type, serviceRecord.Version, serviceRecord.Name);
             if (!System.IO.File.Exists(capabilitiesPath))
             {
                 error = "服务器内部错误：未找到元数据";
-                return error;
+                return BadRequest(error);
             }
             string tempDirectory = Path.GetTempPath();
             if (!Directory.Exists(tempDirectory))
@@ -261,28 +262,34 @@ namespace EMap.MapServer.Services.Controllers
                     ZipFile.ExtractToDirectory(tempZipPath, tempZipDirectory, true);
                     List<string> supportFileNames = GetSupportFileNames(tempZipDirectory);
                     string destDirectory = ServicePathManager.GetServiceDirectory(serviceRecord.Type, serviceRecord.Version, serviceRecord.Name);
+                    if (!Directory.Exists(destDirectory))
+                    {
+                        Directory.CreateDirectory(destDirectory);
+                    }
                     foreach (var supportFileName in supportFileNames)
                     {
                         ret = OgcServiceHelper.AddLayerToCapabilities(serviceRecord.Type, serviceRecord.Version, capabilitiesPath, supportFileName);
                         if (ret)
                         {
+                            string destName = Path.GetFileNameWithoutExtension(supportFileName);
                             string destNameWithExtension = Path.GetFileName(supportFileName);
                             string destLayerPath = Path.Combine(destDirectory, destNameWithExtension);
                             OgcServiceHelper.MoveFile(supportFileName, destLayerPath);
                             LayerRecord layerRecord = new LayerRecord()
                             {
-                                Name = zipName,
+                                Name = destName,
                                 Path = destLayerPath,
                                 Service = serviceRecord
                             };
+                            ConfigContext.Layers.Add(layerRecord);
                         }
                     }
-                    Directory.Delete(tempZipDirectory);
+                    Directory.Delete(tempZipDirectory, true);
                     System.IO.File.Delete(tempZipPath);
                 }
             }
             int result = await ConfigContext.SaveChangesAsync();
-            return error;
+            return RedirectToAction(nameof(Index));
         }
         public static List<string> GetSupportRasterExtensions()
         {

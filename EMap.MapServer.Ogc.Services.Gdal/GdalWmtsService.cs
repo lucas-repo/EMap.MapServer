@@ -27,7 +27,7 @@ namespace EMap.MapServer.Ogc.Services.Gdals
                 {
                     if (dataset != null)
                     {
-                        layerType = dataset.AddToCapabilities(name,capabilities);
+                        layerType = dataset.AddToCapabilities(capabilities);
                     }
                 }
             }

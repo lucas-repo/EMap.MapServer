@@ -28,6 +28,7 @@ namespace EMap.MapServer.Ogc.Services.Gdals
             double xMin, yMin, xMax, yMax;
             using (var layer = dataSource.GetLayerByIndex(0))
             {
+                string layerName= layer.GetName();//todo 调试是否乱码
                 using (var sr = layer.GetSpatialRef())
                 {
                     var ret = sr.ExportToWkt(out projectionStr);

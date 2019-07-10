@@ -170,18 +170,14 @@ namespace EMap.MapServer.Services.Models
         {
             if (File.Exists(srcFileName))
             {
+                string[] srcFileNames = null;
                 try
                 {
                     OSGeo.GDAL.Driver driver = null;
                     using (Dataset dataset = Gdal.Open(srcFileName, Access.GA_ReadOnly))
                     {
                         driver = dataset?.GetDriver();
-                    }
-                    if (driver != null)
-                    {
-                        driver.CopyFiles(destFileName, srcFileName);
-                        driver.Delete(srcFileName);
-                        driver.Dispose();
+                        srcFileNames = dataset.GetUTF8FileList();
                     }
                 }
                 catch (Exception e)
@@ -194,8 +190,9 @@ namespace EMap.MapServer.Services.Models
                             {
                                 using (OSGeo.OGR.Driver driver = dataSource.GetDriver())
                                 {
-                                    driver.CopyDataSource(dataSource, destFileName, null);
+                                    driver.CopyDataSource(dataSource, destFileName, null); 
                                     driver.DeleteDataSource(srcFileName);
+                                    return;
                                 }
                             }
                         }
@@ -205,18 +202,18 @@ namespace EMap.MapServer.Services.Models
                 }
                 //string srcDirectory = Path.GetDirectoryName(srcFileName);
                 //string srcName = Path.GetFileNameWithoutExtension(srcFileName);
-                //string[] srcPathes = Directory.GetFiles(srcDirectory, $"{srcName}.");
-                //string destDirectory = Path.GetDirectoryName(destFileName);
-                //if (!Directory.Exists(destDirectory))
-                //{
-                //    Directory.CreateDirectory(destDirectory);
-                //}
-                //foreach (var srcPath in srcPathes)
-                //{
-                //    string nameWithExtension = Path.GetFileName(srcPath);
-                //    string destPath = Path.Combine(destDirectory, nameWithExtension);
-                //    File.Move(srcPath, destPath);
-                //}
+                //string[] srcFileNames = Directory.GetFiles(srcDirectory, $"{srcName}.");
+                string destDirectory = Path.GetDirectoryName(destFileName);
+                if (!Directory.Exists(destDirectory))
+                {
+                    Directory.CreateDirectory(destDirectory);
+                }
+                foreach (var srcPath in srcFileNames)
+                {
+                    string nameWithExtension = Path.GetFileName(srcPath);
+                    string destPath = Path.Combine(destDirectory, nameWithExtension);
+                    File.Move(srcPath, destPath);
+                }
             }
         }
     }

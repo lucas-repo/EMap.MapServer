@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using EMap.MapServer.Services.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using EMap.MapServer.Services.Models;
-using Microsoft.AspNetCore.Hosting;
-using System.IO;
 using Microsoft.Extensions.Primitives;
-using EMap.MapServer.Ogc.Services;
-using EMap.MapServer.Ogc.Services.Gdals;
-using Microsoft.AspNetCore.Http;
-using System.IO.Compression;
 using OSGeo.GDAL;
 using OSGeo.OGR;
-using System.Diagnostics;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace EMap.MapServer.Services.Controllers
 {
@@ -207,6 +204,11 @@ namespace EMap.MapServer.Services.Controllers
             }
             return error;
         }
+        static bool ContainChinese(string input)
+        {
+            string pattern = "[\u4e00-\u9fbb]";
+            return Regex.IsMatch(input, pattern);
+        }
         [HttpPost]
         public async Task<IActionResult> Upload([FromForm]IFormCollection formData)
         {
@@ -259,7 +261,20 @@ namespace EMap.MapServer.Services.Controllers
                         await formFile.CopyToAsync(stream);
                     }
                     string tempZipDirectory = Path.Combine(tempDirectory, zipName);//zip临时解压目录
-                    ZipFile.ExtractToDirectory(tempZipPath, tempZipDirectory, true);
+                    ZipUtil.UnZip(tempZipPath, tempZipDirectory);
+
+                    //Encoding encoding = Encoding.UTF8;
+                    //ZipArchive zipAchever = ZipFile.Open(tempZipPath, ZipArchiveMode.Read, encoding);
+                    //if (zipAchever.Entries.Count > 0)
+                    //{
+                    //    bool hasChinese = ContainChinese(zipAchever.Entries[0].FullName);
+                    //    if (hasChinese)
+                    //    {
+                    //        encoding = Encoding.GetEncoding("GBK");
+                    //    }
+                    //}
+
+                    //ZipFile.ExtractToDirectory(tempZipPath, tempZipDirectory, encoding, true);//todo根据压缩包编码确定解压编码
                     List<string> supportFileNames = GetSupportFileNames(tempZipDirectory);
                     string destDirectory = ServicePathManager.GetServiceDirectory(serviceRecord.Type, serviceRecord.Version, serviceRecord.Name);
                     if (!Directory.Exists(destDirectory))

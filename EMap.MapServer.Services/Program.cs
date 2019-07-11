@@ -18,7 +18,7 @@ namespace EMap.MapServer.Services
     {
         public static void Main(string[] args)
         {
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);//todo 新增编码，用于测试gdal编码，若不使用则应卸载nuget包
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);//todo 注册编码，注册gdal使用的GBK编码
             Gdal.AllRegister();
             Ogr.RegisterAll();
             // 为了支持中文路径，请添加下面这句代码  

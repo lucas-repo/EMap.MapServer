@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Capabilities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.opengis.net/wmts/1.0">
+  <ServiceIdentification xmlns="http://www.opengis.net/ows/1.1">
+    <Title>Web Map Tile Service</Title>
+    <Abstract>Service that contrains the map access interface to some TileMatrixSets</Abstract>
+    <Keywords>
+      <Keyword>tile</Keyword>
+    </Keywords>
+    <Keywords>
+      <Keyword>map</Keyword>
+    </Keywords>
+    <ServiceType>OGC WMTS</ServiceType>
+    <ServiceTypeVersion>1.0.0</ServiceTypeVersion>
+    <Fees>none</Fees>
+    <AccessConstraints>none</AccessConstraints>
+  </ServiceIdentification>
+  <ServiceProvider xmlns="http://www.opengis.net/ows/1.1">
+    <ProviderName>EMap.MapServer</ProviderName>
+    <ProviderSite d3p1:href="localhost/EMap/Services/测试/MapServer/Wmts" xmlns:d3p1="http://www.w3.org/1999/xlink" />
+    <ServiceContact>
+      <IndividualName>lc</IndividualName>
+      <PositionName>Senior Software Engineer</PositionName>
+      <ContactInfo>
+        <Phone>
+          <Voice>0000-00000000</Voice>
+          <Facsimile>0001-00000001</Facsimile>
+        </Phone>
+        <Address>
+          <DeliveryPoint>jinjiang</DeliveryPoint>
+          <City>chengdu</City>
+          <AdministrativeArea>sichuan</AdministrativeArea>
+          <PostalCode>123456</PostalCode>
+          <Country>china</Country>
+          <ElectronicMailAddress>123456@test.com</ElectronicMailAddress>
+        </Address>
+      </ContactInfo>
+    </ServiceContact>
+  </ServiceProvider>
+  <OperationsMetadata xmlns="http://www.opengis.net/ows/1.1">
+    <Operation name="GetCapabilities">
+      <DCP>
+        <HTTP>
+          <Get d6p1:href="localhost/EMap/Services/测试/MapServer/Wmts" xmlns:d6p1="http://www.w3.org/1999/xlink">
+            <Constraint name="GetEncoding">
+              <AllowedValues>
+                <Value>REST</Value>
+              </AllowedValues>
+            </Constraint>
+          </Get>
+          <Get d6p1:href="localhost/EMap/Services/测试/MapServer/Wmts?" xmlns:d6p1="http://www.w3.org/1999/xlink">
+            <Constraint name="GetEncoding">
+              <AllowedValues>
+                <Value>KVP</Value>
+              </AllowedValues>
+            </Constraint>
+          </Get>
+        </HTTP>
+      </DCP>
+    </Operation>
+    <Operation name="GetTile">
+      <DCP>
+        <HTTP>
+          <Get d6p1:href="localhost/EMap/Services/测试/MapServer/Wmts" xmlns:d6p1="http://www.w3.org/1999/xlink">
+            <Constraint name="GetEncoding">
+              <AllowedValues>
+                <Value>REST</Value>
+              </AllowedValues>
+            </Constraint>
+          </Get>
+          <Get d6p1:href="localhost/EMap/Services/测试/MapServer/Wmts?" xmlns:d6p1="http://www.w3.org/1999/xlink">
+            <Constraint name="GetEncoding">
+              <AllowedValues>
+                <Value>KVP</Value>
+              </AllowedValues>
+            </Constraint>
+          </Get>
+        </HTTP>
+      </DCP>
+    </Operation>
+    <Operation name="GetFeatureinfo">
+      <DCP>
+        <HTTP>
+          <Get d6p1:href="localhost/EMap/Services/测试/MapServer/Wmts" xmlns:d6p1="http://www.w3.org/1999/xlink">
+            <Constraint name="GetEncoding">
+              <AllowedValues>
+                <Value>REST</Value>
+              </AllowedValues>
+            </Constraint>
+          </Get>
+          <Get d6p1:href="localhost/EMap/Services/测试/MapServer/Wmts?" xmlns:d6p1="http://www.w3.org/1999/xlink">
+            <Constraint name="GetEncoding">
+              <AllowedValues>
+                <Value>KVP</Value>
+              </AllowedValues>
+            </Constraint>
+          </Get>
+        </HTTP>
+      </DCP>
+    </Operation>
+  </OperationsMetadata>
+  <Contents>
+    <Layer>
+      <Title xmlns="http://www.opengis.net/ows/1.1">福州市电子地�?tif</Title>
+      <Abstract xmlns="http://www.opengis.net/ows/1.1">福州市电子地�?tif</Abstract>
+      <WGS84BoundingBox xmlns="http://www.opengis.net/ows/1.1">
+        <LowerCorner>118.375883102417 25.252591850931</LowerCorner>
+        <UpperCorner>120.51234291461 26.6384828102461</UpperCorner>
+      </WGS84BoundingBox>
+      <Identifier xmlns="http://www.opengis.net/ows/1.1">福州市电子地�?tif</Identifier>
+      <BoundingBox xmlns="http://www.opengis.net/ows/1.1">
+        <LowerCorner>118.375883102417 25.252591850931</LowerCorner>
+        <UpperCorner>120.51234291461 26.6384828102461</UpperCorner>
+      </BoundingBox>
+      <Style>
+        <Identifier xmlns="http://www.opengis.net/ows/1.1">default</Identifier>
+      </Style>
+      <Format>image/png</Format>
+      <Format>image/jpg</Format>
+      <TileMatrixSetLink />
+    </Layer>
+    <TileMatrixSet>
+      <Identifier xmlns="http://www.opengis.net/ows/1.1" />
+      <SupportedCRS xmlns="http://www.opengis.net/ows/1.1">urn:ogc:def:crs:OGC:1.3:CRS84</SupportedCRS>
+      <TileMatrix>
+        <Identifier xmlns="http://www.opengis.net/ows/1.1">0</Identifier>
+        <ScaleDenominator>156543.03392804097</ScaleDenominator>
+        <TopLeftCorner>118.375883102417 26.6384828102461</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>1</MatrixWidth>
+        <MatrixHeight>1</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <Identifier xmlns="http://www.opengis.net/ows/1.1">1</Identifier>
+        <ScaleDenominator>78271.516964020484</ScaleDenominator>
+        <TopLeftCorner>118.375883102417 26.6384828102461</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>1</MatrixWidth>
+        <MatrixHeight>1</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <Identifier xmlns="http://www.opengis.net/ows/1.1">2</Identifier>
+        <ScaleDenominator>39135.758482010242</ScaleDenominator>
+        <TopLeftCorner>118.375883102417 26.6384828102461</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>1</MatrixWidth>
+        <MatrixHeight>1</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <Identifier xmlns="http://www.opengis.net/ows/1.1">3</Identifier>
+        <ScaleDenominator>19567.879241005121</ScaleDenominator>
+        <TopLeftCorner>118.375883102417 26.6384828102461</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>1</MatrixWidth>
+        <MatrixHeight>1</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <Identifier xmlns="http://www.opengis.net/ows/1.1">4</Identifier>
+        <ScaleDenominator>9783.93962050256</ScaleDenominator>
+        <TopLeftCorner>118.375883102417 26.6384828102461</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>1</MatrixWidth>
+        <MatrixHeight>1</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <Identifier xmlns="http://www.opengis.net/ows/1.1">5</Identifier>
+        <ScaleDenominator>4891.96981025128</ScaleDenominator>
+        <TopLeftCorner>118.375883102417 26.6384828102461</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>1</MatrixWidth>
+        <MatrixHeight>1</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <Identifier xmlns="http://www.opengis.net/ows/1.1">6</Identifier>
+        <ScaleDenominator>2445.98490512564</ScaleDenominator>
+        <TopLeftCorner>118.375883102417 26.6384828102461</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>1</MatrixWidth>
+        <MatrixHeight>1</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <Identifier xmlns="http://www.opengis.net/ows/1.1">7</Identifier>
+        <ScaleDenominator>1222.99245256282</ScaleDenominator>
+        <TopLeftCorner>118.375883102417 26.6384828102461</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>1</MatrixWidth>
+        <MatrixHeight>1</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <Identifier xmlns="http://www.opengis.net/ows/1.1">8</Identifier>
+        <ScaleDenominator>611.49622628141</ScaleDenominator>
+        <TopLeftCorner>118.375883102417 26.6384828102461</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>1</MatrixWidth>
+        <MatrixHeight>1</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <Identifier xmlns="http://www.opengis.net/ows/1.1">9</Identifier>
+        <ScaleDenominator>305.748113140705</ScaleDenominator>
+        <TopLeftCorner>118.375883102417 26.6384828102461</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>1</MatrixWidth>
+        <MatrixHeight>1</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <Identifier xmlns="http://www.opengis.net/ows/1.1">10</Identifier>
+        <ScaleDenominator>152.87405657035251</ScaleDenominator>
+        <TopLeftCorner>118.375883102417 26.6384828102461</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>1</MatrixWidth>
+        <MatrixHeight>1</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <Identifier xmlns="http://www.opengis.net/ows/1.1">11</Identifier>
+        <ScaleDenominator>76.437028285176254</ScaleDenominator>
+        <TopLeftCorner>118.375883102417 26.6384828102461</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>1</MatrixWidth>
+        <MatrixHeight>1</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <Identifier xmlns="http://www.opengis.net/ows/1.1">12</Identifier>
+        <ScaleDenominator>38.218514142588127</ScaleDenominator>
+        <TopLeftCorner>118.375883102417 26.6384828102461</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>1</MatrixWidth>
+        <MatrixHeight>1</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <Identifier xmlns="http://www.opengis.net/ows/1.1">13</Identifier>
+        <ScaleDenominator>19.109257071294063</ScaleDenominator>
+        <TopLeftCorner>118.375883102417 26.6384828102461</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>1</MatrixWidth>
+        <MatrixHeight>1</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <Identifier xmlns="http://www.opengis.net/ows/1.1">14</Identifier>
+        <ScaleDenominator>9.5546285356470317</ScaleDenominator>
+        <TopLeftCorner>118.375883102417 26.6384828102461</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>1</MatrixWidth>
+        <MatrixHeight>1</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <Identifier xmlns="http://www.opengis.net/ows/1.1">15</Identifier>
+        <ScaleDenominator>4.7773142678235159</ScaleDenominator>
+        <TopLeftCorner>118.375883102417 26.6384828102461</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>1</MatrixWidth>
+        <MatrixHeight>1</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <Identifier xmlns="http://www.opengis.net/ows/1.1">16</Identifier>
+        <ScaleDenominator>2.3886571339117579</ScaleDenominator>
+        <TopLeftCorner>118.375883102417 26.6384828102461</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>1</MatrixWidth>
+        <MatrixHeight>1</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <Identifier xmlns="http://www.opengis.net/ows/1.1">17</Identifier>
+        <ScaleDenominator>1.194328566955879</ScaleDenominator>
+        <TopLeftCorner>118.375883102417 26.6384828102461</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>1</MatrixWidth>
+        <MatrixHeight>1</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <Identifier xmlns="http://www.opengis.net/ows/1.1">18</Identifier>
+        <ScaleDenominator>0.59716428347793948</ScaleDenominator>
+        <TopLeftCorner>118.375883102417 26.6384828102461</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>1</MatrixWidth>
+        <MatrixHeight>1</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <Identifier xmlns="http://www.opengis.net/ows/1.1">19</Identifier>
+        <ScaleDenominator>0.29858214173896974</ScaleDenominator>
+        <TopLeftCorner>118.375883102417 26.6384828102461</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>1</MatrixWidth>
+        <MatrixHeight>1</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <Identifier xmlns="http://www.opengis.net/ows/1.1">20</Identifier>
+        <ScaleDenominator>0.14929107086948487</ScaleDenominator>
+        <TopLeftCorner>118.375883102417 26.6384828102461</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>1</MatrixWidth>
+        <MatrixHeight>1</MatrixHeight>
+      </TileMatrix>
+    </TileMatrixSet>
+  </Contents>
+</Capabilities>

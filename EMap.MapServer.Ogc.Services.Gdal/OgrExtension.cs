@@ -26,16 +26,22 @@ namespace EMap.MapServer.Ogc.Services.Gdals
         {
             string projectionStr;
             double xMin, yMin, xMax, yMax;
+            string tileMatrixSet = null;
             using (var layer = dataSource.GetLayerByIndex(0))
             {
                 string layerName= layer.GetName();//todo 调试是否乱码
-                using (var sr = layer.GetSpatialRef())
+                using (var spatialReference = layer.GetSpatialRef())
                 {
-                    var ret = sr.ExportToWkt(out projectionStr);
+                    tileMatrixSet = spatialReference.GetAttrValue("GEOGCS", 0);
+                    var ret = spatialReference.ExportToWkt(out projectionStr);
                 }
                 layer.GetExtent(out xMin, out yMin, out xMax, out yMax);
             }
             LayerType layerType = CapabilitiesHelper.AddToCapabilities(capabilities, name, projectionStr, xMin, yMin, xMax, yMax);
+            string href = capabilities.GetHref(WmtsOperationType.GetTile, WmtsRequestType.REST);
+            URLTemplateType tileTemplate = CapabilitiesHelper.CreateTileResourceURL(href, name, tileMatrixSet);
+            URLTemplateType featureInfoTemplate = CapabilitiesHelper.CreateFeatureInfoResourceURL(href, name, tileMatrixSet);
+            layerType.ResourceURL = new URLTemplateType[] { tileTemplate, featureInfoTemplate };
             return layerType;
         }
     }

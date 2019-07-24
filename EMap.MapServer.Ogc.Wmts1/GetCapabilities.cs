@@ -14,8 +14,9 @@ namespace EMap.MapServer.Ogc.Wmts1 {
         
         private string serviceField;
         
-        public GetCapabilities() {
+        public GetCapabilities(string version) {
             this.serviceField = "WMTS";
+            AcceptVersions = new string[] { version };
         }
         
         

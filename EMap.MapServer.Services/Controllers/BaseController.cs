@@ -20,7 +20,7 @@ namespace EMap.MapServer.Services.Controllers
             {
                 if (_ogcServiceHelper == null)
                 {
-                    string href = Request.Host.Host;
+                    string href = GetHref();
                     _ogcServiceHelper = new OgcServiceHelper(ConfigContext, ServicePathManager, href);
                 }
                 return _ogcServiceHelper;
@@ -31,6 +31,11 @@ namespace EMap.MapServer.Services.Controllers
             HostingEnvironment = environment;
             ConfigContext = configContext;
             ServicePathManager = new ServicePathManager(HostingEnvironment.ContentRootPath, ConfigContext);
+        }
+        protected string GetHref()
+        {
+            string href = $"{Request.Scheme}://{Request.Host}";
+            return href;
         }
     }
 }

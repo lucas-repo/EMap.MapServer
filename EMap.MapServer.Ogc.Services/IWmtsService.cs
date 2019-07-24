@@ -12,6 +12,6 @@ namespace EMap.MapServer.Ogc.Services
         void RemoveContent(Capabilities capabilities, string contentIdentifier);
         Capabilities GetCapabilities(string capabilitiesPath, GetCapabilities getCapabilities);
         byte[] GetTile(Capabilities capabilities, string path, GetTile getTile);
-        FeatureInfoResponse GetFeatureInfo(string capabilitiesPath, GetFeatureInfo getFeatureInfo);
+        FeatureInfoResponse GetFeatureInfo(Capabilities capabilities, string capabilitiesPath, GetFeatureInfo getFeatureInfo);
     }
 }

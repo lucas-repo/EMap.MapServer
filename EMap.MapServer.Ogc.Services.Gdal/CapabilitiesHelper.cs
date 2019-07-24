@@ -8,9 +8,12 @@ using System.Text;
 
 namespace EMap.MapServer.Ogc.Services.Gdals
 {
+    /// <summary>
+    /// Capabilities的辅助方法
+    /// </summary>
     public static class CapabilitiesHelper
     {
-        public static LanguageStringType[] GetLanguageStringTypes(string name)
+        public static LanguageStringType[] CreateLanguageStringTypes(string name)
         {
             LanguageStringType[] languageStringTypes = new LanguageStringType[]
             {
@@ -21,7 +24,7 @@ namespace EMap.MapServer.Ogc.Services.Gdals
             };
             return languageStringTypes;
         }
-        public static TileMatrixSetLink[] GetTileMatrixSetLinks(string projectName)
+        public static TileMatrixSetLink[] CreateTileMatrixSetLinks(string projectName)
         {
             TileMatrixSetLink[] tileMatrixSetLinks = new TileMatrixSetLink[]
             {
@@ -32,7 +35,7 @@ namespace EMap.MapServer.Ogc.Services.Gdals
             };
             return tileMatrixSetLinks;
         }
-        public static BoundingBoxType[] GetBoundingBoxTypes(double xMin, double yMin, double xMax, double yMax)
+        public static BoundingBoxType[] CreateBoundingBoxTypes(double xMin, double yMin, double xMax, double yMax)
         {
             BoundingBoxType[] boundingBoxTypes = new BoundingBoxType[]
             {
@@ -44,7 +47,7 @@ namespace EMap.MapServer.Ogc.Services.Gdals
             };
             return boundingBoxTypes;
         }
-        public static WGS84BoundingBoxType[] GetWGS84BoundingBoxTypes(double xMin, double yMin, double xMax, double yMax)
+        public static WGS84BoundingBoxType[] CreateWGS84BoundingBoxTypes(double xMin, double yMin, double xMax, double yMax)
         {
             WGS84BoundingBoxType[] boundingBoxTypes = new WGS84BoundingBoxType[]
             {
@@ -56,7 +59,7 @@ namespace EMap.MapServer.Ogc.Services.Gdals
             };
             return boundingBoxTypes;
         }
-        public static Style[] GetStyles(bool isDefault, string identifier)
+        public static Style[] CreateStyles(bool isDefault, string identifier)
         {
             Style[] styles = new Style[]
             {
@@ -72,15 +75,17 @@ namespace EMap.MapServer.Ogc.Services.Gdals
             return styles;
         }
 
-        public static TileMatrix[] GetTileMatrices(double semimajor, double xMin, double yMin, double xMax, double yMax, int minLevel = 0, int maxLevel = 18, int tileWidth = 256, int tileHeight = 256)
+        public static TileMatrix[] CreateTileMatrices(double semimajor, double xMin, double yMin, double xMax, double yMax, int minLevel = 0, int maxLevel = 18, int tileWidth = 256, int tileHeight = 256)
         {
             double extentWidth = xMax - xMin;
             double extentHeight = yMax - yMin;
+            int dpi = 96;
             List<TileMatrix> tileMatrices = new List<TileMatrix>();
             {
                 for (int i = minLevel; i <= maxLevel; i++)
                 {
-                    double scaleDenominator = Math.PI * semimajor / (128 * Math.Pow(2, i));
+                    double resolution = Math.PI * semimajor / (128 * Math.Pow(2, i));
+                    double scaleDenominator = resolution * dpi / 0.0254;
                     double tileDWidth = Math.PI * semimajor / Math.Pow(2, i - 1);
                     double tileDHeight = tileDWidth;
                     int matrixWidth = (int)Math.Ceiling(extentWidth / tileDWidth);
@@ -103,18 +108,18 @@ namespace EMap.MapServer.Ogc.Services.Gdals
             }
             return tileMatrices.ToArray();
         }
-        public static LayerType GetLayerType(string name)
+        public static LayerType CreateLayerType(string name)
         {
-            LanguageStringType[] titles = GetLanguageStringTypes(name);
-            LanguageStringType[] abstracts = GetLanguageStringTypes(name);
+            LanguageStringType[] titles = CreateLanguageStringTypes(name);
+            LanguageStringType[] abstracts = CreateLanguageStringTypes(name);
             CodeType identifier = new CodeType()
             {
                 Value = name
             };
-            Style[] styles = GetStyles(true, "default");
+            Style[] styles = CreateStyles(true, "default");
             string[] formats = new string[]
             {
-                "image/png","image/jpg"
+                "image/png","image/jpeg"
             };
             LayerType layerType = new LayerType()
             {
@@ -126,6 +131,27 @@ namespace EMap.MapServer.Ogc.Services.Gdals
             };
             return layerType;
         }
+        public static URLTemplateType CreateTileResourceURL(string href, string name, string tileMatrixSet, string style = "default", string format = "png")
+        {
+            URLTemplateType getTileResourceURL = new URLTemplateType()
+            {
+                format = "image/{format}",
+                resourceType = "tile",
+                template = $"{href}/{name}/{style}/{tileMatrixSet}/{{TileMatrix}}/{{TileRow}}/{{TileCol}}.{format}"
+            };
+            return getTileResourceURL;
+        }
+        public static URLTemplateType CreateFeatureInfoResourceURL(string href, string name, string tileMatrixSet, string style = "default")
+        {
+            URLTemplateType getFeatureInfoResourceURL = new URLTemplateType()
+            {
+                format = "application/gml+xml; version=3.1",
+                resourceType = "FeatureInfo",
+                template = $"{href}/{name}/{style}/{tileMatrixSet}/{{TileMatrix}}/{{TileRow}}/{{TileCol}}/{{J}}/{{I}}.xml"
+            };
+            return getFeatureInfoResourceURL;
+        }
+
 
         public static LayerType AddToCapabilities(Capabilities capabilities, string name, string projectionStr, double xMin, double yMin, double xMax, double yMax)
         {
@@ -149,10 +175,10 @@ namespace EMap.MapServer.Ogc.Services.Gdals
             datasets = capabilities.Contents.DatasetDescriptionSummary;
 
             #region 获取layerType
-            layerType = GetLayerType(name);
+            layerType = CreateLayerType(name);
             string projectName = null;
             double semimajor;
-            BoundingBoxType[] boundingBoxs = GetBoundingBoxTypes(xMin, yMin, xMax, yMax);
+            BoundingBoxType[] boundingBoxs = CreateBoundingBoxTypes(xMin, yMin, xMax, yMax);
             WGS84BoundingBoxType[] WGS84BoundingBoxes = null;
 
             using (OSGeo.OSR.SpatialReference srcSR = new OSGeo.OSR.SpatialReference(projectionStr))
@@ -162,21 +188,25 @@ namespace EMap.MapServer.Ogc.Services.Gdals
                 using (OSGeo.OSR.SpatialReference destSR = new OSGeo.OSR.SpatialReference(""))
                 {
                     destSR.SetWellKnownGeogCS("EPSG:4326");
+                    double WGS84XMin = xMin;
+                    double WGS84YMin = yMin;
+                    double WGS84XMax = xMax;
+                    double WGS84YMax = yMax;
                     if (srcSR.IsSame(destSR) != 1)
                     {
                         double[] leftBottom = { xMin, yMin };
                         double[] topRight = { xMax, yMax };
                         srcSR.CoordTransform(destSR, leftBottom, topRight);
-                        xMin = leftBottom[0];
-                        yMin = leftBottom[1];
-                        xMax = topRight[0];
-                        yMax = topRight[1];
+                        WGS84XMin = leftBottom[0];
+                        WGS84YMin = leftBottom[1];
+                        WGS84XMax = topRight[0];
+                        WGS84YMax = topRight[1];
                     }
-                    WGS84BoundingBoxes = GetWGS84BoundingBoxTypes(xMin, yMin, xMax, yMax);
+                    WGS84BoundingBoxes = CreateWGS84BoundingBoxTypes(WGS84XMin, WGS84YMin, WGS84XMax, WGS84YMax);
                 }
             }
 
-            TileMatrixSetLink[] tileMatrixSetLinks = GetTileMatrixSetLinks(projectName);
+            TileMatrixSetLink[] tileMatrixSetLinks = CreateTileMatrixSetLinks(projectName);
             layerType.BoundingBox = boundingBoxs;
             layerType.WGS84BoundingBox = WGS84BoundingBoxes;
             layerType.TileMatrixSetLink = tileMatrixSetLinks;
@@ -193,7 +223,7 @@ namespace EMap.MapServer.Ogc.Services.Gdals
                 tileMatrixSets = capabilities.Contents.TileMatrixSet;
                 int minLevel = 0;
                 int maxLevel = 20;
-                TileMatrix[] tileMatrices = GetTileMatrices(semimajor, xMin, yMin, xMax, yMax, minLevel, maxLevel); 
+                TileMatrix[] tileMatrices = CreateTileMatrices(semimajor, xMin, yMin, xMax, yMax, minLevel, maxLevel);
                 TileMatrixSet tileMatrixSet = new TileMatrixSet()
                 {
                     Identifier = new CodeType()

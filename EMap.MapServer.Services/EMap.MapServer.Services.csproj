@@ -30,7 +30,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
     <PackageReference Include="SharpZipLib" Version="1.1.0" />
-    <PackageReference Include="System.IO.Compression.ZipFile" Version="4.3.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.5.1" />
   </ItemGroup>
 
@@ -38,6 +37,7 @@
     <ProjectReference Include="..\EMap.MapServer.Ogc.Services.Gdal\EMap.MapServer.Ogc.Services.Gdals.csproj" />
     <ProjectReference Include="..\EMap.MapServer.Ogc.Services\EMap.MapServer.Ogc.Services.csproj" />
     <ProjectReference Include="..\EMap.MapServer.Ogc.Wmts1\EMap.MapServer.Ogc.Wmts1.csproj" />
+    <ProjectReference Include="..\EMap.MapServer.OpenLayers\EMap.MapServer.OpenLayers.csproj" />
   </ItemGroup>
 
 </Project>

@@ -10,6 +10,7 @@ using EMap.MapServer.Ogc.Services;
 using Microsoft.AspNetCore.Hosting;
 using EMap.MapServer.Ogc.Wmts1;
 using System.IO;
+using System.Text.Encodings.Web;
 
 namespace EMap.MapServer.Services.Controllers
 {
@@ -24,7 +25,22 @@ namespace EMap.MapServer.Services.Controllers
         {
             return View(await ConfigContext.Services.ToListAsync());
         }
-
+        public async Task<IActionResult> Layers(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            ServiceRecord serviceRecord = await ConfigContext.Services.FindAsync(id);
+            if (serviceRecord == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Layers", new { serviceId = id });
+            }
+        }
         // GET: Services/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -32,10 +48,21 @@ namespace EMap.MapServer.Services.Controllers
             {
                 return NotFound();
             }
-            List<LayerRecord> layerRecords = await (from layerRecord in ConfigContext.Layers
-                                                    join serviceRecord in ConfigContext.Services on layerRecord.ServiceId equals serviceRecord.Id
-                                                    select layerRecord).ToListAsync();
-            return View(layerRecords);
+            ServiceRecord serviceRecord = await ConfigContext.Services.FindAsync(id);
+            if (serviceRecord == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                string href = GetHref();
+                string routTemplate = OgcServiceHelper.GetRoutTemplate<WmtsController>("GetCapabilities");
+                routTemplate = routTemplate.Replace("{serviceName}", serviceRecord.Name);
+                routTemplate = routTemplate.Replace("{version}", serviceRecord.Version);
+                routTemplate = string.Join("/", routTemplate.Split("/").Select(s => System.Net.WebUtility.UrlEncode(s)));
+                string url = $"{href}/{routTemplate}";
+                return Redirect(url);
+            }
         }
 
         // GET: Services/Create

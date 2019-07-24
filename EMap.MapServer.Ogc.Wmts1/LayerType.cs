@@ -1,4 +1,5 @@
 ﻿using EMap.MapServer.Ogc.Ows1_1;
+using System.Linq;
 
 namespace EMap.MapServer.Ogc.Wmts1 {
     
@@ -89,5 +90,29 @@ namespace EMap.MapServer.Ogc.Wmts1 {
                 this.resourceURLField = value;
             }
         }
+
+        #region Functions
+        public string GetDefaultStyle()
+        {
+            string defaultStyle = Style?.FirstOrDefault(x => x.isDefault)?.Identifier.Value;
+            return defaultStyle;
+        }
+        public URLTemplateType GetTileResourceURL( string resourceType)
+        {
+            URLTemplateType templateType = ResourceURL?.FirstOrDefault(x => x.resourceType == resourceType);
+            return templateType;
+        }
+
+        public string GetTileTemplate()
+        {
+            URLTemplateType templateType = GetTileResourceURL( "tile");
+            return templateType.template;
+        }
+        public string GetFeatureInfoTemplate()
+        {
+            URLTemplateType templateType = GetTileResourceURL( "FeatureInfo");
+            return templateType.template;
+        }
+        #endregion
     }
 }

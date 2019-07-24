@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace EMap.MapServer.Services.Models
@@ -27,14 +28,36 @@ namespace EMap.MapServer.Services.Models
             _servicePathManager = servicePathManager;
             _host = host;
         }
-        private string GetRoutTemplate<T>() where T : ControllerBase
+        private static string GetTemplate(object[] attributes)
         {
-            Type type = typeof(T);
-            object[] attributes = type.GetCustomAttributes(typeof(RouteAttribute), false);
-            string routTemplate = null;
+            string template = null;
             if (attributes.Length > 0 && attributes[0] is RouteAttribute routeAttribute)
             {
-                routTemplate = routeAttribute.Template;
+                template = routeAttribute.Template;
+            }
+            return template;
+        }
+        public static string GetRoutTemplate<T>(string methodName=null) where T : ControllerBase
+        {
+            Type type = typeof(T);
+            object[] classAttributes = type.GetCustomAttributes(typeof(RouteAttribute), false);
+            string routTemplate = GetTemplate(classAttributes);
+            if (methodName != null)
+            {
+                var methodInfo = type.GetMethod(methodName);
+                object[] methodAttributes = methodInfo.GetCustomAttributes(typeof(RouteAttribute), false);
+                string methodRoutTemplate = GetTemplate(methodAttributes);
+                if (string.IsNullOrEmpty(routTemplate))
+                {
+                    routTemplate = methodRoutTemplate;
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(methodRoutTemplate))
+                    {
+                        routTemplate = $"{routTemplate}/{methodRoutTemplate}";
+                    }
+                }
             }
             return routTemplate;
         }
@@ -170,39 +193,9 @@ namespace EMap.MapServer.Services.Models
         {
             if (File.Exists(srcFileName))
             {
-                string[] srcFileNames = null;
-                try
-                {
-                    OSGeo.GDAL.Driver driver = null;
-                    using (Dataset dataset = Gdal.Open(srcFileName, Access.GA_ReadOnly))
-                    {
-                        driver = dataset?.GetDriver();
-                        srcFileNames = dataset.GetUTF8FileList();
-                    }
-                }
-                catch (Exception e)
-                {
-                    try
-                    {
-                        using (DataSource dataSource = Ogr.Open(srcFileName, 0))
-                        {
-                            if (dataSource != null)
-                            {
-                                using (OSGeo.OGR.Driver driver = dataSource.GetDriver())
-                                {
-                                    driver.CopyDataSource(dataSource, destFileName, null); 
-                                    driver.DeleteDataSource(srcFileName);
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    { }
-                }
-                //string srcDirectory = Path.GetDirectoryName(srcFileName);
-                //string srcName = Path.GetFileNameWithoutExtension(srcFileName);
-                //string[] srcFileNames = Directory.GetFiles(srcDirectory, $"{srcName}.");
+                string srcDirectory = Path.GetDirectoryName(srcFileName);
+                string srcName = Path.GetFileNameWithoutExtension(srcFileName);
+                string[] srcFileNames = Directory.GetFiles(srcDirectory, $"{srcName}.*");
                 string destDirectory = Path.GetDirectoryName(destFileName);
                 if (!Directory.Exists(destDirectory))
                 {

@@ -53,6 +53,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Ogc.Wmts1", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Services", "EMap.MapServer.Services\EMap.MapServer.Services.csproj", "{AE8F8E9C-0A78-4598-AEA3-F215D2331FF0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMap.MapServer.OpenLayers", "EMap.MapServer.OpenLayers\EMap.MapServer.OpenLayers.csproj", "{0DD22C3D-037D-422C-87F0-F62021276011}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -159,6 +161,10 @@ Global
 		{AE8F8E9C-0A78-4598-AEA3-F215D2331FF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE8F8E9C-0A78-4598-AEA3-F215D2331FF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE8F8E9C-0A78-4598-AEA3-F215D2331FF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DD22C3D-037D-422C-87F0-F62021276011}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DD22C3D-037D-422C-87F0-F62021276011}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DD22C3D-037D-422C-87F0-F62021276011}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DD22C3D-037D-422C-87F0-F62021276011}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

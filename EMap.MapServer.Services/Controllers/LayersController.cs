@@ -1,4 +1,5 @@
-﻿using EMap.MapServer.Services.Models;
+﻿using EMap.MapServer.Ogc.Services.Gdals;
+using EMap.MapServer.Services.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,9 +15,14 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Query;
+using EMap.MapServer.OpenLayers;
+using EMap.MapServer.Ogc.Wmts1;
+using EMap.MapServer.Services.ViewModels;
 
 namespace EMap.MapServer.Services.Controllers
 {
+    //[Route("[controller]")]
     public class LayersController : BaseController
     {
         public LayersController(IHostingEnvironment environment, ConfigContext configContext) : base(environment, configContext)
@@ -26,10 +32,25 @@ namespace EMap.MapServer.Services.Controllers
         // GET: Layers
         public async Task<IActionResult> Index()
         {
-            var configContext = ConfigContext.Layers.Include(l => l.Service);
-            return View(await configContext.ToListAsync());
+            return View(await Index(null));
         }
-
+        [Route("{serviceId}")]
+        public async Task<IActionResult> Index(int? serviceId)
+        {
+            var layerRecords = (from layerItem in ConfigContext.Layers
+                                join serviceItem in ConfigContext.Services on layerItem.ServiceId equals serviceItem.Id
+                                select layerItem).Include(x => x.Service);
+            List<LayerRecord> layers;
+            if (serviceId != null)
+            {
+                layers = await layerRecords.Where(x => x.ServiceId == serviceId).ToListAsync();
+            }
+            else
+            {
+                layers = await layerRecords.ToListAsync();
+            }
+            return View(layers);
+        }
         // GET: Layers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -48,6 +69,8 @@ namespace EMap.MapServer.Services.Controllers
 
             return View(layerRecord);
         }
+        // GET: Layers/Preview/5
+        [Route("[controller]/Preview/{id}")]
         public async Task<IActionResult> Preview(int? id)
         {
             if (id == null)
@@ -62,8 +85,106 @@ namespace EMap.MapServer.Services.Controllers
             {
                 return NotFound();
             }
+            PreviewModel previewModel = new PreviewModel()
+            {
+                 LayerId= id.Value
+            };
+            return View(previewModel);
+        }
+        [Route("[controller]/Preview/{id}/{width}/{height}")]
+        public async Task<IActionResult> Preview(int? id, int width, int height)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-            return View(layerRecord);
+            var layerRecord = await ConfigContext.Layers
+                .Include(l => l.Service)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (layerRecord == null)
+            {
+                return NotFound();
+            }
+            ServiceRecord serviceRecord = layerRecord.Service;
+            View view = new View();
+            OpenLayers.layer.BaseLayer baseLayer = null;
+            switch (serviceRecord.Type)
+            {
+                case OgcServiceType.Wmts:
+                    GdalWmtsService gdalWmtsService = new GdalWmtsService();
+
+                    string capabilitiesPath = ServicePathManager.GetCapabilitiesPath(serviceRecord.Type, serviceRecord.Version, serviceRecord.Name);
+                    Capabilities capabilities = null;
+                    using (StreamReader sr = new StreamReader(capabilitiesPath))
+                    {
+                        capabilities = gdalWmtsService.XmlDeSerialize(sr);
+                    }
+                    LayerType layerType = capabilities.GetLayerType(layerRecord.Name);
+                    string format= layerType.Format.FirstOrDefault();
+                    string destTileMatrixSetName = layerType.TileMatrixSetLink.FirstOrDefault()?.TileMatrixSet;
+                    TileMatrixSet tileMatrixSet = capabilities.GetTileMatrixSet(destTileMatrixSetName);
+                    double[] origin = tileMatrixSet.TileMatrix.FirstOrDefault()?.TopLeftCorner?.ToDoubleValues();
+                    var levelAndscaleDenominators = tileMatrixSet.TileMatrix.Select(x => new { x.Identifier.Value, x.ScaleDenominator }).ToList();
+                    double[] resolutions = new double[levelAndscaleDenominators.Count];
+                    string[] matrixIds = new string[levelAndscaleDenominators.Count];
+                    int dpi = 96;
+                    for (int i = 0; i < levelAndscaleDenominators.Count; i++)
+                    {
+                        matrixIds[i] = levelAndscaleDenominators[i].Value;
+                        double scaleDenominator = levelAndscaleDenominators[i].ScaleDenominator;
+                        resolutions[i] = 0.0254 * scaleDenominator / dpi;
+                    }
+
+                    var bound = layerType.BoundingBox.FirstOrDefault();
+                    double[] lowerCorner = bound.LowerCorner.ToDoubleValues();
+                    double[] upperCorner = bound.UpperCorner.ToDoubleValues();
+                    double xmin = lowerCorner[0];
+                    double ymin = lowerCorner[1];
+                    double xmax = upperCorner[0];
+                    double ymax = upperCorner[1];
+                    double[] extent = new double[] { xmin, ymin, xmax, ymax };
+                    double centerX = (xmin + xmax) / 2;
+                    double centerY = (ymin + ymax) / 2;
+                    view.center = new double[] { centerX, centerY };
+                    view.extent = extent;
+                    view.zoom = LayerHelper.GetFixedLevel(resolutions.ToList(), xmin, ymin, xmax, ymax, width, height);
+                    view.maxZoom = resolutions.Length - 1;
+                    WmtsTileGrid tileGrid = new WmtsTileGrid()
+                    {
+                        origin = origin,
+                        matrixIds = matrixIds,
+                        resolutions = resolutions,
+                        extent = extent
+                    };
+                    OpenLayers.source.Wmts source = new OpenLayers.source.Wmts()
+                    {
+                        url = capabilities.GetHref(),
+                        layer = layerRecord.Name,
+                        tileGrid = tileGrid,
+                        matrixSet = destTileMatrixSetName,
+                        format= format
+                    };
+                    baseLayer = new OpenLayers.layer.TileLayer()
+                    {
+                        source = source
+                    };
+                    break;
+                default:
+                    return NotFound();
+            }
+            Map map = new Map()
+            {
+                layers = new OpenLayers.layer.BaseLayer[] { baseLayer },
+                view =view
+            };
+            return new JsonResult(map);
+            //PreviewModel previewModel = new PreviewModel()
+            //{
+            //    Layers = new OpenLayers.layer.BaseLayer[] { baseLayer },
+            //    View = view
+            //};
+            //return View(previewModel);
         }
         // GET: Layers/Create
         public IActionResult Create()
@@ -262,19 +383,6 @@ namespace EMap.MapServer.Services.Controllers
                     }
                     string tempZipDirectory = Path.Combine(tempDirectory, zipName);//zip临时解压目录
                     ZipUtil.UnZip(tempZipPath, tempZipDirectory);
-
-                    //Encoding encoding = Encoding.UTF8;
-                    //ZipArchive zipAchever = ZipFile.Open(tempZipPath, ZipArchiveMode.Read, encoding);
-                    //if (zipAchever.Entries.Count > 0)
-                    //{
-                    //    bool hasChinese = ContainChinese(zipAchever.Entries[0].FullName);
-                    //    if (hasChinese)
-                    //    {
-                    //        encoding = Encoding.GetEncoding("GBK");
-                    //    }
-                    //}
-
-                    //ZipFile.ExtractToDirectory(tempZipPath, tempZipDirectory, encoding, true);//todo根据压缩包编码确定解压编码
                     List<string> supportFileNames = GetSupportFileNames(tempZipDirectory);
                     string destDirectory = ServicePathManager.GetServiceDirectory(serviceRecord.Type, serviceRecord.Version, serviceRecord.Name);
                     if (!Directory.Exists(destDirectory))
@@ -304,7 +412,7 @@ namespace EMap.MapServer.Services.Controllers
                 }
             }
             int result = await ConfigContext.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Ok();
         }
         public static List<string> GetSupportRasterExtensions()
         {

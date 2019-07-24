@@ -20,7 +20,7 @@ namespace EMap.MapServer.Services.Controllers
     public class WmtsController : BaseApiController
     {
         protected Encoding Encoding { get; } = Encoding.UTF8;
-        public WmtsController(IHostingEnvironment environment, ConfigContext configContext):base(environment,configContext)
+        public WmtsController(IHostingEnvironment environment, ConfigContext configContext) : base(environment, configContext)
         {
         }
         #region private functions   
@@ -68,17 +68,12 @@ namespace EMap.MapServer.Services.Controllers
                 statusCode = 500;
                 goto Exception;
             }
-            IWmtsService wmts1Service = GetWmts1Service(version);
-            Capabilities capabilities = wmts1Service.GetCapabilities(serviceRecord.Path, getCapabilities);
-            if (getCapabilities.AcceptFormats?.Length > 0)
-            {
-                result.ContentType = getCapabilities.AcceptFormats[0].Trim();
-            }
+            IWmtsService wmtsService = GetWmts1Service(version);
+            Capabilities capabilities = wmtsService.GetCapabilities(serviceRecord.Path, getCapabilities);
             StringBuilder sb = new StringBuilder();
             using (StringWriter sw = new StringWriter(sb))
             {
-                wmts1Service.XmlSerialize(sw, capabilities);
-                sw.Close();
+                wmtsService.XmlSerialize(sw, capabilities);
             }
             result.Content = sb.ToString();
             goto Success;
@@ -181,17 +176,8 @@ namespace EMap.MapServer.Services.Controllers
                 statusCode = 400;
                 goto Exception;
             }
-            if (!System.IO.File.Exists(layerRecord.Path))
-            {
-                exception = ExceptionReportHelper.GetExceptionReport("NoApplicableCode", exceptionText: "Internal server error");
-                statusCode = 500;
-                goto Exception;
-            }
             #endregion
-            GetCapabilities getCapabilities = new GetCapabilities()
-            {
-                AcceptVersions = new string[]{ version }
-            };
+            GetCapabilities getCapabilities = new GetCapabilities(version);
             IWmtsService wmts1Service = GetWmts1Service(version);
             Capabilities capabilities = wmts1Service.GetCapabilities(serviceRecord.Path, getCapabilities);
             if (capabilities == null)
@@ -200,7 +186,7 @@ namespace EMap.MapServer.Services.Controllers
                 statusCode = 500;
                 goto Exception;
             }
-            LayerType layerType = capabilities.Contents?.DatasetDescriptionSummary?.FirstOrDefault(x => x.Identifier?.Value == layerName && x is LayerType) as LayerType;
+            LayerType layerType = capabilities.GetLayerType(layerRecord.Name);
             if (layerType == null)
             {
                 exception = ExceptionReportHelper.GetExceptionReport("NoApplicableCode", exceptionText: "Internal server error");
@@ -242,22 +228,18 @@ namespace EMap.MapServer.Services.Controllers
                             statusCode = 500;
                             goto Exception;
                         }
-                        bool ret1 = boundingBoxType.LowerCorner.ToPosition(out double xMin, out double yMin);
-                        bool ret2 = boundingBoxType.UpperCorner.ToPosition(out double xMax, out double yMax);
-                        if (!ret1 || !ret2)
+                        bool ret0 = boundingBoxType.LowerCorner.ToPosition(out double xMin, out double yMin);
+                        bool ret1 = boundingBoxType.UpperCorner.ToPosition(out double xMax, out double yMax);
+                        if (!ret0 || !ret1)
                         {
                             exception = ExceptionReportHelper.GetExceptionReport("NoApplicableCode", exceptionText: "Internal server error");
                             statusCode = 500;
                             goto Exception;
                         }
-                        double tileXMin = 0, tileYMin = 0, tileXMax = 0, tileYMax = 0;
-                        int tileWidth = Convert.ToInt32(layerTileMatrix.TileWidth);
-                        int tileHeight = Convert.ToInt32(layerTileMatrix.TileHeight);
-                        tileXMin = left + getTile.TileCol * tileWidth * layerTileMatrix.ScaleDenominator;
-                        tileXMax = left + (getTile.TileCol + 1) * tileWidth * layerTileMatrix.ScaleDenominator;
-                        tileYMax = top - getTile.TileRow * tileHeight * layerTileMatrix.ScaleDenominator;
-                        tileYMin = top - (getTile.TileRow + 1) * tileHeight * layerTileMatrix.ScaleDenominator;
-                        if (tileXMax <= xMin || tileXMin >= xMax || tileYMax <= yMin || tileYMin >= yMax)
+                        layerTileMatrix.GetTileIndex(xMin, yMax, out int startCol, out int startRow);
+                        int matrixWidth = Convert.ToInt32(layerTileMatrix.MatrixWidth);
+                        int matrixHeight = Convert.ToInt32(layerTileMatrix.MatrixHeight);
+                        if (getTile.TileCol<startCol|| getTile.TileCol>= startCol+ matrixWidth|| getTile.TileRow < startRow || getTile.TileRow >= startRow + matrixHeight)
                         {
                             exception = ExceptionReportHelper.GetExceptionReport("TileOutOfRange", exceptionText: "Bad request");
                             statusCode = 400;
@@ -380,7 +362,7 @@ namespace EMap.MapServer.Services.Controllers
                 goto Exception;
             }
             #endregion
-            GetCapabilities getCapabilities = new GetCapabilities();
+            GetCapabilities getCapabilities = new GetCapabilities(version);
             IWmtsService wmts1Service = GetWmts1Service(version);
             Capabilities capabilities = wmts1Service.GetCapabilities(serviceRecord.Path, getCapabilities);
             if (capabilities == null)
@@ -461,7 +443,7 @@ namespace EMap.MapServer.Services.Controllers
                     }
                 }
             }
-            FeatureInfoResponse featureInfoResponse = wmts1Service.GetFeatureInfo(serviceRecord.Path, getFeatureInfo);
+            FeatureInfoResponse featureInfoResponse = wmts1Service.GetFeatureInfo(capabilities, serviceRecord.Path, getFeatureInfo);
             content = XmlHelper.XmlSerialize(featureInfoResponse, Encoding, null);
             goto Success;
         Exception:
@@ -474,17 +456,14 @@ namespace EMap.MapServer.Services.Controllers
             };
             return result;
         }
+
         #endregion
 
         #region REST
         [Route("{version}/WMTSCapabilities.xml")]
         public async Task<ActionResult> GetCapabilities(string serviceName, string version)
         {
-            GetCapabilities getCapabilities = new GetCapabilities();
-            if (!string.IsNullOrEmpty(version))
-            {
-                getCapabilities.AcceptVersions = new string[] { version };
-            }
+            GetCapabilities getCapabilities = new GetCapabilities(version);
             ContentResult result = await GetCapabilities(serviceName, getCapabilities);
             return result;
         }
@@ -492,20 +471,25 @@ namespace EMap.MapServer.Services.Controllers
         public async Task<ActionResult> GetTile(string serviceName, string layer, string style, string tileMatrixSet, string tileMatrix, int tileRow, int tileCol, string format)
         {
             string mimeType = $"image/{format}";
+            GetTile getTile = GetGetTile(serviceName, layer, style, tileMatrixSet, tileMatrix, tileRow, tileCol, mimeType);
+            var result = await GetTile(serviceName, getTile);
+            return result;
+        }
+        private GetTile GetGetTile(string serviceName, string layer, string style, string tileMatrixSet, string tileMatrix, int tileRow, int tileCol, string formatMimeType)
+        {
             GetTile getTile = new GetTile()
             {
                 service = "WMTS",
                 version = "1.0.0",
                 Layer = layer,
                 Style = style,
-                Format = mimeType,
+                Format = formatMimeType,
                 TileMatrixSet = tileMatrixSet,
                 TileMatrix = tileMatrix,
                 TileRow = tileRow,
                 TileCol = tileCol
             };
-            var result = await GetTile(serviceName, getTile);
-            return result;
+            return getTile;
         }
         [Route("{layer}/{style}/{tileMatrixSet}/{tileMatrix}/{tileRow}/{tileCol}/{j}/{i}.xml")]
         public async Task<ActionResult> GetFeatureInfo(string serviceName, string layer, string style, string tileMatrixSet, string tileMatrix, int tileRow, int tileCol, int j, int i)
@@ -538,17 +522,37 @@ namespace EMap.MapServer.Services.Controllers
         #endregion
 
         #region KVP
-
+        public async Task<ActionResult> RequestByKvp(string service, string version, string serviceName, string request, string layer = null, string style = "default", string format = null, string tileMatrixSet = null, string tileMatrix = null, int tileRow = 0, int tileCol = 0, int j = 0, int i = 0)
+        {
+            ActionResult actionResult = null;
+            if (service.ToLower() == "wmts" && version == "1.0.0")
+            {
+                switch (request.ToLower())
+                {
+                    case "getcapabilities":
+                        actionResult = await GetCapabilities(serviceName, version);
+                        break;
+                    case "gettile":
+                        GetTile getTile = GetGetTile(serviceName, layer, style, tileMatrixSet, tileMatrix, tileRow, tileCol, format);
+                        actionResult = await GetTile(serviceName, getTile);
+                        break;
+                    case "getfeatureinfo":
+                        actionResult = await GetFeatureInfo(serviceName, layer, style, tileMatrixSet, tileMatrix, tileRow, tileCol, j, i);
+                        break;
+                }
+            }
+            return actionResult;
+        }
         #endregion
         protected IWmtsService GetWmts1Service(string version = "1.0.0")
         {
-            OgcServiceType serviceType =  OgcServiceType.Wmts;
+            OgcServiceType serviceType = OgcServiceType.Wmts;
             IWmtsService wmts1Service = OgcServiceHelper.GetOgcService(serviceType, version) as IWmtsService;
             return wmts1Service;
         }
         protected async Task<ServiceRecord> GetServiceRecord(string serviceName, string version)
         {
-            ServiceRecord serviceRecord = await ConfigContext.Services.FirstOrDefaultAsync(x => x.Name == serviceName && x.Version == version && x.Type== OgcServiceType.Wmts);
+            ServiceRecord serviceRecord = await ConfigContext.Services.FirstOrDefaultAsync(x => x.Name == serviceName && x.Version == version && x.Type == OgcServiceType.Wmts);
             return serviceRecord;
         }
         protected async Task<LayerRecord> GetLayerRecord(string serviceName, string version, string layerName)

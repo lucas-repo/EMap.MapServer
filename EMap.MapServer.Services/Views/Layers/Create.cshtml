@@ -57,8 +57,11 @@
                         contentType: false,
                         processData: false,
                         success: function (data) {
-                            if (data != null&&data!="") {
-                                alert("返回值"+data);
+                            if (data != null && data != "") {
+                                alert("返回值" + data);
+                            }
+                            else {
+                                alert("上传成功" );
                             }
                         },
                         error: function (data) {

@@ -14,13 +14,13 @@ namespace EMap.MapServer.Ogc.Services
         public override string Service => "WMTS";
         public override string Version => "1.0.0";
         public virtual Encoding Encoding { get; } = Encoding.UTF8;
-        private static RequestMethodType GetRequestMethodType(string href, string value)
+        private static RequestMethodType GetRequestMethodType(string href, WmtsRequestType value)
         {
             object[] allowedValues = new Ows1_1.ValueType[]
             {
                 new Ows1_1.ValueType()
                 {
-                     Value=value
+                     Value=value.ToString()
                 }
             };
             DomainType constraint = new DomainType()
@@ -41,16 +41,16 @@ namespace EMap.MapServer.Ogc.Services
         }
         public static RequestMethodType GetRestRequestMethodType(string href)
         {
-            RequestMethodType restRequest = GetRequestMethodType(href, "REST");
+            RequestMethodType restRequest = GetRequestMethodType(href, WmtsRequestType.REST);
             return restRequest;
         }
 
         public static RequestMethodType GetKvpRequestMethodType(string href)
         {
-            RequestMethodType restRequest = GetRequestMethodType(href, "KVP");
+            RequestMethodType restRequest = GetRequestMethodType(href, WmtsRequestType.KVP);
             return restRequest;
         }
-        public static Operation GetOperation(string href, string operationName)
+        public Operation GetOperation(string href, WmtsOperationType operationType)
         {
             RequestMethodType restRequest = GetRestRequestMethodType(href);
             RequestMethodType kvpRequest = GetKvpRequestMethodType($"{href}?");
@@ -77,7 +77,7 @@ namespace EMap.MapServer.Ogc.Services
             };
             Operation operation = new Operation()
             {
-                name = operationName,
+                name = operationType.ToString(),
                 DCP = DCPs
             };
             return operation;
@@ -200,9 +200,9 @@ namespace EMap.MapServer.Ogc.Services
             #endregion
 
             #region OperationsMetadata
-            Operation getCapabilitiesOperation = GetOperation(href, "GetCapabilities");
-            Operation getTileOperation = GetOperation(href, "GetTile");
-            Operation getFeatureinfoOperation = GetOperation(href, "GetFeatureinfo");
+            Operation getCapabilitiesOperation = GetOperation(href,  WmtsOperationType.GetCapabilities);
+            Operation getTileOperation = GetOperation(href,  WmtsOperationType.GetTile);
+            Operation getFeatureinfoOperation = GetOperation(href,  WmtsOperationType.GetFeatureinfo);
             Operation[] operations = new Operation[]
             {
                 getCapabilitiesOperation,
@@ -219,7 +219,9 @@ namespace EMap.MapServer.Ogc.Services
             {
                 ServiceIdentification = serviceIdentification,
                 ServiceProvider = serviceProvider,
-                OperationsMetadata = operationsMetadata
+                OperationsMetadata = operationsMetadata,
+                
+                version= Version
             };
             return capabilities;
         }
@@ -310,7 +312,7 @@ namespace EMap.MapServer.Ogc.Services
             return capabilities;
         }
 
-        public abstract FeatureInfoResponse GetFeatureInfo(string path, GetFeatureInfo getFeatureInfo);
+        public abstract FeatureInfoResponse GetFeatureInfo(Capabilities capabilities, string path, GetFeatureInfo getFeatureInfo);
 
         public abstract byte[] GetTile(Capabilities capabilities, string path, GetTile getTile);
 
@@ -339,7 +341,12 @@ namespace EMap.MapServer.Ogc.Services
             if (textWriter != null && capabilities != null)
             {
                 XmlSerializer serializer = GetXmlSerializer(typeof(Capabilities));
-                serializer.Serialize(textWriter, capabilities);
+                XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces();
+                namespaces.Add("ows", "http://www.opengis.net/ows/1.1");
+                namespaces.Add("gml", "http://www.opengis.net/gml");
+                namespaces.Add("xlink", "http://www.w3.org/1999/xlink");
+                namespaces.Add("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+                serializer.Serialize(textWriter, capabilities, namespaces);
             }
         }
 

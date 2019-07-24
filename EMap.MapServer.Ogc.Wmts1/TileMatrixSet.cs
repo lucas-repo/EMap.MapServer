@@ -1,4 +1,6 @@
 ﻿using EMap.MapServer.Ogc.Ows1_1;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace EMap.MapServer.Ogc.Wmts1 {
     
@@ -76,5 +78,17 @@ namespace EMap.MapServer.Ogc.Wmts1 {
                 this.tileMatrixField = value;
             }
         }
+        #region Functions
+        public IEnumerable<TileMatrix> GetTileMatrices(string identifer)
+        {
+            IEnumerable<TileMatrix> tileMatrices = TileMatrix?.Where(x => x.Identifier.Value == identifer);
+            return tileMatrices;
+        }
+        public TileMatrix GetTileMatrix(string identifer)
+        {
+            TileMatrix tileMatrix = GetTileMatrices(identifer).FirstOrDefault();
+            return tileMatrix;
+        }
+        #endregion
     }
 }

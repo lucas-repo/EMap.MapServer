@@ -39,8 +39,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.SMIL20.Langu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Xlink", "EMap.MapServer.Xlink\EMap.MapServer.Xlink.csproj", "{F55E8093-14F2-4A7D-9639-92473D3874B3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Ogc.Services.Gdals", "EMap.MapServer.Ogc.Services.Gdal\EMap.MapServer.Ogc.Services.Gdals.csproj", "{64B9E127-780A-49A7-A7E8-B23F496FB63B}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Ogc.Swe2", "EMap.MapServer.Ogc.Swe2\EMap.MapServer.Ogc.Swe2.csproj", "{AF87AE34-024E-4A81-AEBE-6CD7E743859A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Ogc.Wcs2", "EMap.MapServer.Ogc.Wcs2\EMap.MapServer.Ogc.Wcs2.csproj", "{5233C356-3401-4E26-9076-1BD8E813AC71}"
@@ -53,7 +51,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Ogc.Wmts1", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Services", "EMap.MapServer.Services\EMap.MapServer.Services.csproj", "{AE8F8E9C-0A78-4598-AEA3-F215D2331FF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMap.MapServer.OpenLayers", "EMap.MapServer.OpenLayers\EMap.MapServer.OpenLayers.csproj", "{0DD22C3D-037D-422C-87F0-F62021276011}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.OpenLayers", "EMap.MapServer.OpenLayers\EMap.MapServer.OpenLayers.csproj", "{0DD22C3D-037D-422C-87F0-F62021276011}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Ogc.Services.Gdals", "EMap.MapServer.Ogc.Services.Gdals\EMap.MapServer.Ogc.Services.Gdals.csproj", "{D26FA0E5-6659-445F-A64A-24E6F5EB7246}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -133,10 +133,6 @@ Global
 		{F55E8093-14F2-4A7D-9639-92473D3874B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F55E8093-14F2-4A7D-9639-92473D3874B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F55E8093-14F2-4A7D-9639-92473D3874B3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{64B9E127-780A-49A7-A7E8-B23F496FB63B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{64B9E127-780A-49A7-A7E8-B23F496FB63B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{64B9E127-780A-49A7-A7E8-B23F496FB63B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{64B9E127-780A-49A7-A7E8-B23F496FB63B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AF87AE34-024E-4A81-AEBE-6CD7E743859A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AF87AE34-024E-4A81-AEBE-6CD7E743859A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF87AE34-024E-4A81-AEBE-6CD7E743859A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -165,6 +161,10 @@ Global
 		{0DD22C3D-037D-422C-87F0-F62021276011}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0DD22C3D-037D-422C-87F0-F62021276011}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0DD22C3D-037D-422C-87F0-F62021276011}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D26FA0E5-6659-445F-A64A-24E6F5EB7246}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D26FA0E5-6659-445F-A64A-24E6F5EB7246}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D26FA0E5-6659-445F-A64A-24E6F5EB7246}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D26FA0E5-6659-445F-A64A-24E6F5EB7246}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,9 +1,6 @@
-﻿using EMap.MapServer.Ogc.Services;
-using EMap.MapServer.Ogc.Services.Gdals;
-using EMap.MapServer.Services.Models;
+﻿using EMap.MapServer.Services.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using OSGeo.GDAL;
 using System;
 
 namespace EMap.MapServer.Services.Controllers

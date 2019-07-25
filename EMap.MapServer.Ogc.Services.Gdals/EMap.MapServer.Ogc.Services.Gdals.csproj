@@ -13,6 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="EMap.Gis.Symbology" Version="1.0.0-beta0002" />
     <PackageReference Include="Gdal.Core" Version="2.3.0-beta-023" />
     <PackageReference Include="Gdal.Core.WindowsRuntime" Version="2.3.0-beta-023" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0006" />
@@ -23,12 +24,6 @@
     <ProjectReference Include="..\EMap.MapServer.Ogc.Ows1_1\EMap.MapServer.Ogc.Ows1_1.csproj" />
     <ProjectReference Include="..\EMap.MapServer.Ogc.Services\EMap.MapServer.Ogc.Services.csproj" />
     <ProjectReference Include="..\EMap.MapServer.Ogc.Wmts1\EMap.MapServer.Ogc.Wmts1.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="EMap.Gis.Symbology">
-      <HintPath>..\..\EMap.Gis\Bin\Debug\netstandard2.0\EMap.Gis.Symbology.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

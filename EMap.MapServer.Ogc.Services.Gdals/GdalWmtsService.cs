@@ -1,24 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using EMap.Gis.Symbology;
+using EMap.MapServer.Ogc.Gml;
+using EMap.MapServer.Ogc.Ows1_1;
 using EMap.MapServer.Ogc.Wmts1;
 using OSGeo.GDAL;
 using OSGeo.OGR;
-using EMap.MapServer.Ogc.Ows1_1;
+using SixLabors.ImageSharp;
+using SixLabors.Primitives;
+using System;
 using System.IO;
 using System.Linq;
-using EMap.Gis.Symbology;
-using EMap.MapServer.Extensions;
-using SixLabors.Primitives;
-using SixLabors.ImageSharp.Formats;
-using SixLabors.ImageSharp;
-using EMap.MapServer.Ogc.Gml;
 
 namespace EMap.MapServer.Ogc.Services.Gdals
 {
     public class GdalWmtsService : WmtsService, IGdalWmtsService
     {
-        public override LayerType AddContent(Capabilities capabilities, string dataPath)
+        public override LayerType AddLayerType(Capabilities capabilities, string dataPath)
         {
             LayerType layerType = null;
             if (capabilities == null)
@@ -26,30 +22,31 @@ namespace EMap.MapServer.Ogc.Services.Gdals
                 return layerType;
             }
             string name = Path.GetFileNameWithoutExtension(dataPath);
+            Dataset dataset = null;
+            DataSource dataSource = null;
             try
             {
-                using (Dataset dataset = Gdal.Open(dataPath, Access.GA_ReadOnly))
-                {
-                    if (dataset != null)
-                    {
-                        layerType = dataset.AddToCapabilities(name, capabilities);
-                    }
-                }
+                dataset = Gdal.Open(dataPath, Access.GA_ReadOnly);
             }
             catch (Exception e)
             {
                 try
                 {
-                    using (DataSource dataSource = Ogr.Open(dataPath, 0))
-                    {
-                        if (dataSource != null)
-                        {
-                            layerType = dataSource.AddToCapabilities(name, capabilities);
-                        }
-                    }
+                    dataSource = Ogr.Open(dataPath, 0);
                 }
                 catch (Exception exc)
-                { }
+                {
+                }
+            }
+            if (dataset != null)
+            {
+                layerType = dataset.AddToCapabilities(name, capabilities);
+                dataset.Dispose();
+            }
+            else if (dataSource != null)
+            {
+                layerType = dataSource.AddToCapabilities(name, capabilities);
+                dataSource.Dispose();
             }
             return layerType;
         }
@@ -96,7 +93,8 @@ namespace EMap.MapServer.Ogc.Services.Gdals
             {
                 return featureInfoResponse;
             }
-            tileMatrix.GetTileIndex(xMin, yMax, out int startCol, out int startRow);
+            bool isDegree = tileMatrixSet.GetIsDegreeByLocalDb();
+            tileMatrix.GetTileIndex(isDegree,xMin, yMax, out int startCol, out int startRow);
             int matrixWidth = Convert.ToInt32(tileMatrix.MatrixWidth);
             int matrixHeight = Convert.ToInt32(tileMatrix.MatrixHeight);
             if (getTile.TileCol < startCol || getTile.TileCol >= startCol + matrixWidth || getTile.TileRow < startRow || getTile.TileRow >= startRow + matrixHeight)
@@ -130,7 +128,7 @@ namespace EMap.MapServer.Ogc.Services.Gdals
                     {
                         return featureInfoResponse;
                     }
-                    tileMatrix.GetFeatureInfoBoundary(getTile.TileRow, getTile.TileCol, getFeatureInfo.J, getFeatureInfo.I, out double ftInfoXMin, out double ftInfoYMin, out double ftInfoXMax, out double ftInfoYMax);
+                    tileMatrix.GetFeatureInfoBoundary(isDegree, getTile.TileRow, getTile.TileCol, getFeatureInfo.J, getFeatureInfo.I, out double ftInfoXMin, out double ftInfoYMin, out double ftInfoXMax, out double ftInfoYMax);
                     layer.SetSpatialFilterRect(ftInfoXMin, ftInfoYMin, ftInfoXMax, ftInfoYMax);
                     FeatureCollectionType featureCollectionType = new FeatureCollectionType();
                     featureInfoResponse = new FeatureInfoResponse()
@@ -188,7 +186,8 @@ namespace EMap.MapServer.Ogc.Services.Gdals
             {
                 return buffer;
             }
-            tileMatrix.GetTileIndex(xMin, yMax, out int startCol, out int startRow);
+            bool isDegree= tileMatrixSet.GetIsDegreeByLocalDb();
+            tileMatrix.GetTileIndex(isDegree,xMin, yMax, out int startCol, out int startRow);
             int matrixWidth = Convert.ToInt32(tileMatrix.MatrixWidth);
             int matrixHeight = Convert.ToInt32(tileMatrix.MatrixHeight);
             if (getTile.TileCol < startCol || getTile.TileCol >= startCol + matrixWidth || getTile.TileRow < startRow || getTile.TileRow >= startRow + matrixHeight)
@@ -211,7 +210,7 @@ namespace EMap.MapServer.Ogc.Services.Gdals
                 {
                     return buffer;
                 }
-                tileMatrix.GetTileBoundary(getTile.TileRow, getTile.TileCol, out double tileXMin, out double tileYMin, out double tileXMax, out double tileYMax);
+                tileMatrix.GetTileBoundary(isDegree, getTile.TileRow, getTile.TileCol, out double tileXMin, out double tileYMin, out double tileXMax, out double tileYMax);
                 using (Envelope envelope = new Envelope())
                 {
                     envelope.MinX = tileXMin;

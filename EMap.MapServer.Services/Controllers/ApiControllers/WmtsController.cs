@@ -1,16 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using EMap.MapServer.Ogc.Ows1_1;
+﻿using EMap.MapServer.Ogc.Ows1_1;
+using EMap.MapServer.Ogc.Services;
 using EMap.MapServer.Ogc.Wmts1;
 using EMap.MapServer.Services.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EMap.MapServer.Extensions;
-using EMap.MapServer.Ogc.Services;
-using Microsoft.AspNetCore.Hosting;
 
 namespace EMap.MapServer.Services.Controllers
 {
@@ -236,10 +236,11 @@ namespace EMap.MapServer.Services.Controllers
                             statusCode = 500;
                             goto Exception;
                         }
-                        layerTileMatrix.GetTileIndex(xMin, yMax, out int startCol, out int startRow);
+                        bool isDegree = layerTileMatrixSet.GetIsDegreeByLocalDb();
+                        layerTileMatrix.GetTileIndex(isDegree, xMin, yMax, out int startCol, out int startRow);
                         int matrixWidth = Convert.ToInt32(layerTileMatrix.MatrixWidth);
                         int matrixHeight = Convert.ToInt32(layerTileMatrix.MatrixHeight);
-                        if (getTile.TileCol<startCol|| getTile.TileCol>= startCol+ matrixWidth|| getTile.TileRow < startRow || getTile.TileRow >= startRow + matrixHeight)
+                        if (getTile.TileCol < startCol || getTile.TileCol >= startCol + matrixWidth || getTile.TileRow < startRow || getTile.TileRow >= startRow + matrixHeight)
                         {
                             exception = ExceptionReportHelper.GetExceptionReport("TileOutOfRange", exceptionText: "Bad request");
                             statusCode = 400;
@@ -248,8 +249,15 @@ namespace EMap.MapServer.Services.Controllers
                     }
                 }
             }
-            byte[] tileBuffer = wmts1Service.GetTile(capabilities, layerRecord.Path, getTile);
-            result = new FileContentResult(tileBuffer, getTile.Format);
+            try
+            {
+                byte[] tileBuffer = wmts1Service.GetTile(capabilities, layerRecord.Path, getTile);
+                result = new FileContentResult(tileBuffer, getTile.Format);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine($"获取瓦片{getTile.TileMatrix}_{getTile.TileCol}_{getTile.TileRow}失败:{e.Message}");
+            }
             goto Success;
         Exception:
             string content = XmlHelper.XmlSerialize(exception, Encoding, null);
@@ -519,13 +527,13 @@ namespace EMap.MapServer.Services.Controllers
             return result;
         }
 
-        #endregion
+        #endregion  
 
         #region KVP
-        public async Task<ActionResult> RequestByKvp(string service, string version, string serviceName, string request, string layer = null, string style = "default", string format = null, string tileMatrixSet = null, string tileMatrix = null, int tileRow = 0, int tileCol = 0, int j = 0, int i = 0)
+        public async Task<ActionResult> RequestByKvp(string service = "wmts", string version = "1.0.0", string serviceName = null, string request = "GetCapabilities", string layer = null, string style = "default", string format = null, string tileMatrixSet = null, string tileMatrix = null, int tileRow = 0, int tileCol = 0, int j = 0, int i = 0)
         {
             ActionResult actionResult = null;
-            if (service.ToLower() == "wmts" && version == "1.0.0")
+            if (version == "1.0.0")
             {
                 switch (request.ToLower())
                 {

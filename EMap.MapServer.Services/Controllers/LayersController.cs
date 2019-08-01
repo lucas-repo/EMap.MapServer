@@ -19,6 +19,7 @@ using Microsoft.EntityFrameworkCore.Query;
 using EMap.MapServer.OpenLayers;
 using EMap.MapServer.Ogc.Wmts1;
 using EMap.MapServer.Services.ViewModels;
+using EMap.MapServer.OpenLayers.proj;
 
 namespace EMap.MapServer.Services.Controllers
 {
@@ -125,16 +126,8 @@ namespace EMap.MapServer.Services.Controllers
                     string destTileMatrixSetName = layerType.TileMatrixSetLink.FirstOrDefault()?.TileMatrixSet;
                     TileMatrixSet tileMatrixSet = capabilities.GetTileMatrixSet(destTileMatrixSetName);
                     double[] origin = tileMatrixSet.TileMatrix.FirstOrDefault()?.TopLeftCorner?.ToDoubleValues();
-                    var levelAndscaleDenominators = tileMatrixSet.TileMatrix.Select(x => new { x.Identifier.Value, x.ScaleDenominator }).ToList();
-                    double[] resolutions = new double[levelAndscaleDenominators.Count];
-                    string[] matrixIds = new string[levelAndscaleDenominators.Count];
-                    int dpi = 96;
-                    for (int i = 0; i < levelAndscaleDenominators.Count; i++)
-                    {
-                        matrixIds[i] = levelAndscaleDenominators[i].Value;
-                        double scaleDenominator = levelAndscaleDenominators[i].ScaleDenominator;
-                        resolutions[i] = 0.0254 * scaleDenominator / dpi;
-                    }
+                    string[] matrixIds = tileMatrixSet.TileMatrix.Select(x => x.Identifier.Value).ToArray();
+                    double[] resolutions = tileMatrixSet.GetResolutions(matrixIds).ToArray();
 
                     var bound = layerType.BoundingBox.FirstOrDefault();
                     double[] lowerCorner = bound.LowerCorner.ToDoubleValues();
@@ -148,13 +141,23 @@ namespace EMap.MapServer.Services.Controllers
                     double centerY = (ymin + ymax) / 2;
                     view.center = new double[] { centerX, centerY };
                     view.extent = extent;
-                    view.zoom = LayerHelper.GetFixedLevel(resolutions.ToList(), xmin, ymin, xmax, ymax, width, height);
+                    view.zoom = TileMatrixSet.GetSuitableZoom(resolutions.ToList(), xmin, ymin, xmax, ymax, width, height);
+                    view.resolution = resolutions[view.zoom];
                     view.maxZoom = resolutions.Length - 1;
+                    if (!string.IsNullOrEmpty(tileMatrixSet.SupportedCRS))
+                    {
+                        string[] array = tileMatrixSet.SupportedCRS.Split("EPSG");
+                        if (array.Length > 0)
+                        {
+                            string epsg = array[array.Length - 1].Replace(":", "");
+                            view.projection = $"EPSG:{epsg}";
+                        }
+                    }
                     WmtsTileGrid tileGrid = new WmtsTileGrid()
                     {
                         origin = origin,
                         matrixIds = matrixIds,
-                        resolutions = resolutions,
+                        resolutions = resolutions, 
                         extent = extent
                     };
                     OpenLayers.source.Wmts source = new OpenLayers.source.Wmts()
@@ -287,9 +290,19 @@ namespace EMap.MapServer.Services.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var layerRecord = await ConfigContext.Layers.FindAsync(id);
-            ConfigContext.Layers.Remove(layerRecord);
-            await ConfigContext.SaveChangesAsync();
+            LayerRecord layerRecord = await ConfigContext.Layers.FindAsync(id);
+            if (layerRecord == null)
+            {
+                return NotFound("未找到图层");
+            }
+            ServiceRecord serviceRecord = await ConfigContext.Services.FindAsync(layerRecord.ServiceId);
+            if (serviceRecord == null)
+            {
+                return StatusCode(500);
+            }
+
+            string capabilitiesPath = ServicePathManager.GetCapabilitiesPath(serviceRecord.Type, serviceRecord.Version, serviceRecord.Name);
+            await OgcServiceHelper.RemoveLayerFromCapabilities(serviceRecord, capabilitiesPath, layerRecord);
             return RedirectToAction(nameof(Index));
         }
         public string ValidateLayerName(int serviceId, string layerName)
@@ -383,28 +396,22 @@ namespace EMap.MapServer.Services.Controllers
                     }
                     string tempZipDirectory = Path.Combine(tempDirectory, zipName);//zip临时解压目录
                     ZipUtil.UnZip(tempZipPath, tempZipDirectory);
-                    List<string> supportFileNames = GetSupportFileNames(tempZipDirectory);
+                    List<string> srcFileNames = GetSupportFileNames(tempZipDirectory);
                     string destDirectory = ServicePathManager.GetServiceDirectory(serviceRecord.Type, serviceRecord.Version, serviceRecord.Name);
                     if (!Directory.Exists(destDirectory))
                     {
                         Directory.CreateDirectory(destDirectory);
                     }
-                    foreach (var supportFileName in supportFileNames)
+                    foreach (var srcFileName in srcFileNames)
                     {
-                        ret = OgcServiceHelper.AddLayerToCapabilities(serviceRecord.Type, serviceRecord.Version, capabilitiesPath, supportFileName);
-                        if (ret)
+                        string destNameWithExtension = Path.GetFileName(srcFileName);
+                        string destFileName = Path.Combine(destDirectory, destNameWithExtension);
+                        OgcServiceHelper.MoveDataSet(srcFileName, destFileName);
+
+                        ret = OgcServiceHelper.AddLayerToCapabilities(serviceRecord, capabilitiesPath, destFileName);
+                        if (!ret)
                         {
-                            string destName = Path.GetFileNameWithoutExtension(supportFileName);
-                            string destNameWithExtension = Path.GetFileName(supportFileName);
-                            string destLayerPath = Path.Combine(destDirectory, destNameWithExtension);
-                            OgcServiceHelper.MoveFile(supportFileName, destLayerPath);
-                            LayerRecord layerRecord = new LayerRecord()
-                            {
-                                Name = destName,
-                                Path = destLayerPath,
-                                Service = serviceRecord
-                            };
-                            ConfigContext.Layers.Add(layerRecord);
+                            OgcServiceHelper.DeleteDataSet(destFileName);
                         }
                     }
                     Directory.Delete(tempZipDirectory, true);

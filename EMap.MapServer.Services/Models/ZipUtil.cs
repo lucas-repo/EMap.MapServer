@@ -255,7 +255,9 @@ namespace EMap.MapServer.Services.Models
                 return false;
 
             if (!Directory.Exists(zipedFolder))
+            {
                 Directory.CreateDirectory(zipedFolder);
+            }
 
             try
             {

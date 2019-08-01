@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using EMap.MapServer.Ogc.Ows1_1;
+using EMap.MapServer.Ogc.Wmts1;
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
-using EMap.MapServer.Ogc.Ows1_1;
-using EMap.MapServer.Ogc.Wmts1;
 
 namespace EMap.MapServer.Ogc.Services
 {
@@ -225,71 +224,10 @@ namespace EMap.MapServer.Ogc.Services
             };
             return capabilities;
         }
-        public abstract LayerType AddContent(Capabilities capabilities, string dataPath);
-        public virtual void RemoveContent(Capabilities capabilities, string contentIdentifier)
+        public abstract LayerType AddLayerType(Capabilities capabilities, string dataPath);
+        public virtual void RemoveLayerType(Capabilities capabilities, string layerName)
         {
-            //remove content
-            DatasetDescriptionSummaryBaseType[] srcContents = capabilities?.Contents?.DatasetDescriptionSummary;
-            if (srcContents == null || string.IsNullOrWhiteSpace(contentIdentifier))
-            {
-                return;
-            }
-            LayerType content = null;
-            for (int i = 0; i < srcContents.Length; i++)
-            {
-                if (srcContents[i].Identifier.Value == contentIdentifier)
-                {
-                    content = srcContents[i] as LayerType;
-                    break;
-                }
-            }
-            if (content == null)
-            {
-                return;
-            }
-            DatasetDescriptionSummaryBaseType[] destContents = srcContents.Remove(content);
-            capabilities.Contents.DatasetDescriptionSummary = destContents;
-            if (content.TileMatrixSetLink == null || content.TileMatrixSetLink.Length == 0)
-            {
-                return;
-            }
-            //remove tileMatrixSet
-            TileMatrixSetLink tileMatrixSetLink = content.TileMatrixSetLink[0];
-            string tileMatrixSetName = tileMatrixSetLink.TileMatrixSet;
-            TileMatrixSet[] tileMatrixSets = capabilities.Contents.TileMatrixSet;
-            TileMatrixSet tileMatrixSet = null;
-            for (int i = 0; i < tileMatrixSets.Length; i++)
-            {
-                if (tileMatrixSets[i].Identifier.Value == tileMatrixSetName)
-                {
-                    tileMatrixSet = tileMatrixSets[i];
-                    break;
-                }
-            }
-            if (tileMatrixSet == null)
-            {
-                return;
-            }
-            bool isReferenced = false;
-            for (int i = 0; i < destContents.Length; i++)
-            {
-                if (destContents[i] is LayerType layerType)
-                {
-                    if (layerType.TileMatrixSetLink == null || layerType.TileMatrixSetLink.Length == 0)
-                    {
-                        continue;
-                    }
-                    if (layerType.TileMatrixSetLink[0].TileMatrixSet == tileMatrixSetName)
-                    {
-                        isReferenced = true;
-                        break;
-                    }
-                }
-            }
-            if (!isReferenced)
-            {
-                capabilities.Contents.TileMatrixSet = capabilities.Contents.TileMatrixSet.Remove(tileMatrixSet);
-            }
+            capabilities.RemoveContent(layerName, typeof(LayerType));
         }
 
         public virtual Capabilities GetCapabilities(string path, GetCapabilities getCapabilities)

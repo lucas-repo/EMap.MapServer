@@ -37,7 +37,9 @@ namespace EMap.MapServer.Ogc.Services.Gdals
                 }
                 layer.GetExtent(out xMin, out yMin, out xMax, out yMax);
             }
-            LayerType layerType = CapabilitiesHelper.AddToCapabilities(capabilities, name, projectionStr, xMin, yMin, xMax, yMax);
+            int minLevel = 0;
+            int maxLevel = 19;
+            LayerType layerType = CapabilitiesHelper.AddToCapabilities(capabilities, name, projectionStr, xMin, yMin, xMax, yMax, minLevel, maxLevel);
             string href = capabilities.GetHref(WmtsOperationType.GetTile, WmtsRequestType.REST);
             URLTemplateType tileTemplate = CapabilitiesHelper.CreateTileResourceURL(href, name, tileMatrixSet);
             URLTemplateType featureInfoTemplate = CapabilitiesHelper.CreateFeatureInfoResourceURL(href, name, tileMatrixSet);

@@ -75,21 +75,43 @@ namespace EMap.MapServer.Ogc.Services.Gdals
             return styles;
         }
 
-        public static TileMatrix[] CreateTileMatrices(double semimajor, double xMin, double yMin, double xMax, double yMax, int minLevel = 0, int maxLevel = 18, int tileWidth = 256, int tileHeight = 256)
+        public static TileMatrix[] CreateTileMatrices(double semimajor, bool isDegree, double xMin, double yMin, double xMax, double yMax, int minLevel = 0, int maxLevel = 18, int tileWidth = 256, int tileHeight = 256)
         {
             double extentWidth = xMax - xMin;
             double extentHeight = yMax - yMin;
-            int dpi = 96;
             List<TileMatrix> tileMatrices = new List<TileMatrix>();
             {
+                double metersPerUnit;
+                if (isDegree)
+                {
+                    metersPerUnit = Math.PI * 6356752.314245179 / 180;
+                }
+                else
+                {
+                    metersPerUnit = 1;
+                }
                 for (int i = minLevel; i <= maxLevel; i++)
                 {
-                    double resolution = Math.PI * semimajor / (128 * Math.Pow(2, i));
-                    double scaleDenominator = resolution * dpi / 0.0254;
-                    double tileDWidth = Math.PI * semimajor / Math.Pow(2, i - 1);
+                    double unitsPerPixel;
+                    double scaleDenominator;
+                    if (isDegree)
+                    {
+                        unitsPerPixel = 360.0 / (Math.Pow(2, i) * 256);
+                        scaleDenominator = unitsPerPixel * metersPerUnit / TileMatrix.ScaleHint;
+                    }
+                    else
+                    {
+                        unitsPerPixel = 2 * Math.PI * semimajor / (Math.Pow(2, i) * tileWidth);
+                        scaleDenominator = unitsPerPixel * metersPerUnit / TileMatrix.ScaleHint;
+                    }
+                    double tileDWidth = 256 * unitsPerPixel;
                     double tileDHeight = tileDWidth;
-                    int matrixWidth = (int)Math.Ceiling(extentWidth / tileDWidth);
-                    int matrixHeight = (int)Math.Ceiling(extentHeight / tileDHeight);
+                    int colStart = 0;
+                    int colEnd = (int)Math.Floor(extentWidth / tileDWidth);
+                    int matrixWidth = colEnd - colStart + 1;
+                    int rowStart = 0;
+                    int rowEnd = (int)Math.Floor(extentHeight / tileDHeight);
+                    int matrixHeight = rowEnd - rowStart + 1;
                     TileMatrix tileMatrix = new TileMatrix()
                     {
                         Identifier = new CodeType()
@@ -135,7 +157,7 @@ namespace EMap.MapServer.Ogc.Services.Gdals
         {
             URLTemplateType getTileResourceURL = new URLTemplateType()
             {
-                format = "image/{format}",
+                format = $"image/{format}",
                 resourceType = "tile",
                 template = $"{href}/{name}/{style}/{tileMatrixSet}/{{TileMatrix}}/{{TileRow}}/{{TileCol}}.{format}"
             };
@@ -153,10 +175,10 @@ namespace EMap.MapServer.Ogc.Services.Gdals
         }
 
 
-        public static LayerType AddToCapabilities(Capabilities capabilities, string name, string projectionStr, double xMin, double yMin, double xMax, double yMax)
+        public static LayerType AddToCapabilities(Capabilities capabilities, string name, string projectionStr, double xMin, double yMin, double xMax, double yMax, int minLevel, int maxLevel)
         {
             LayerType layerType = null;
-            if (capabilities == null || capabilities == null)
+            if (capabilities == null || capabilities == null || minLevel < 0 || minLevel > maxLevel)
             {
                 return layerType;
             }
@@ -176,7 +198,8 @@ namespace EMap.MapServer.Ogc.Services.Gdals
 
             #region 获取layerType
             layerType = CreateLayerType(name);
-            string projectName = null;
+            string projcs = null;
+            string geogcs = null;
             double semimajor;
             BoundingBoxType[] boundingBoxs = CreateBoundingBoxTypes(xMin, yMin, xMax, yMax);
             WGS84BoundingBoxType[] WGS84BoundingBoxes = null;
@@ -184,7 +207,11 @@ namespace EMap.MapServer.Ogc.Services.Gdals
             using (OSGeo.OSR.SpatialReference srcSR = new OSGeo.OSR.SpatialReference(projectionStr))
             {
                 semimajor = srcSR.GetSemiMajor();
-                projectName = srcSR.GetAttrValue("PROJCS", 0);
+                projcs = srcSR.GetAttrValue("PROJCS", 0);
+                if (string.IsNullOrEmpty(projcs))
+                {
+                    geogcs = srcSR.GetAttrValue("GEOGCS", 0);
+                }
                 using (OSGeo.OSR.SpatialReference destSR = new OSGeo.OSR.SpatialReference(""))
                 {
                     destSR.SetWellKnownGeogCS("EPSG:4326");
@@ -205,8 +232,8 @@ namespace EMap.MapServer.Ogc.Services.Gdals
                     WGS84BoundingBoxes = CreateWGS84BoundingBoxTypes(WGS84XMin, WGS84YMin, WGS84XMax, WGS84YMax);
                 }
             }
-
-            TileMatrixSetLink[] tileMatrixSetLinks = CreateTileMatrixSetLinks(projectName);
+            string tileMatrixSetName = !string.IsNullOrEmpty(projcs) ? projcs : geogcs;
+            TileMatrixSetLink[] tileMatrixSetLinks = CreateTileMatrixSetLinks(tileMatrixSetName);
             layerType.BoundingBox = boundingBoxs;
             layerType.WGS84BoundingBox = WGS84BoundingBoxes;
             layerType.TileMatrixSetLink = tileMatrixSetLinks;
@@ -215,25 +242,37 @@ namespace EMap.MapServer.Ogc.Services.Gdals
 
             #region 设置tileMatrixSet
             TileMatrixSet[] tileMatrixSets = capabilities.Contents.TileMatrixSet;
-            if (tileMatrixSets?.Any(x => x.Identifier.Value == projectName) != true)
+            if (tileMatrixSets?.Any(x => x.Identifier.Value == tileMatrixSetName) != true)
             {
                 int tileMatrixSetCount = tileMatrixSets == null ? 1 : tileMatrixSets.Length + 1;
                 capabilities.Contents.TileMatrixSet = new TileMatrixSet[tileMatrixSetCount];
                 tileMatrixSets?.CopyTo(capabilities.Contents.TileMatrixSet, 0);
                 tileMatrixSets = capabilities.Contents.TileMatrixSet;
-                int minLevel = 0;
-                int maxLevel = 20;
-                TileMatrix[] tileMatrices = CreateTileMatrices(semimajor, xMin, yMin, xMax, yMax, minLevel, maxLevel);
-                TileMatrixSet tileMatrixSet = new TileMatrixSet()
+                bool isDegree = projcs == null;
+                TileMatrix[] tileMatrices = CreateTileMatrices(semimajor, isDegree, xMin, yMin, xMax, yMax, minLevel, maxLevel);
+
+                int? wkid = null;
+                if (!string.IsNullOrEmpty(projcs))
                 {
-                    Identifier = new CodeType()
+                    wkid = SpatialReferenceHelper.GetWellKnownWkidFromProjecs(projcs);
+                }
+                else if (!string.IsNullOrEmpty(geogcs))
+                {
+                    wkid = SpatialReferenceHelper.GetWellKnownWkidFromGeogcs(geogcs);
+                }
+                if (wkid.HasValue)
+                {
+                    TileMatrixSet tileMatrixSet = new TileMatrixSet()
                     {
-                        Value = projectName
-                    },
-                    SupportedCRS = "urn:ogc:def:crs:OGC:1.3:CRS84",//TODO 待修改
-                    TileMatrix = tileMatrices
-                };
-                tileMatrixSets[tileMatrixSets.Length - 1] = tileMatrixSet;
+                        Identifier = new CodeType()
+                        {
+                            Value = tileMatrixSetName
+                        },
+                        SupportedCRS = $"urn:ogc:def:crs:EPSG::{wkid.Value}",//TODO 待修改 根据名称获取EPSG，网上下载arcgis的
+                        TileMatrix = tileMatrices
+                    };
+                    tileMatrixSets[tileMatrixSets.Length - 1] = tileMatrixSet;
+                }
             }
             #endregion
             return layerType;

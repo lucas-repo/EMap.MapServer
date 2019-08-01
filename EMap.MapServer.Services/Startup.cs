@@ -17,7 +17,7 @@ namespace EMap.MapServer.Services
     {
         public Startup(IConfiguration configuration)
         {
-            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+            //AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             Configuration = configuration;
         }
         private static Assembly GetAssembly(string fileName)

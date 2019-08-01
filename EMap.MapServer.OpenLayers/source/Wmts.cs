@@ -33,6 +33,8 @@ namespace EMap.MapServer.OpenLayers.source
         //public object dimensions { get; set; }//todo !Object不知道什么类型
         
         public Wmts() : base("ol.source.WMTS")
-        { }
+        {
+            
+        }
     }
 }

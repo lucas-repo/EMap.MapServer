@@ -37,7 +37,7 @@ namespace EMap.MapServer.Services.Models
             }
             return template;
         }
-        public static string GetRoutTemplate<T>(string methodName=null) where T : ControllerBase
+        public static string GetRoutTemplate<T>(string methodName = null) where T : ControllerBase
         {
             Type type = typeof(T);
             object[] classAttributes = type.GetCustomAttributes(typeof(RouteAttribute), false);
@@ -89,10 +89,7 @@ namespace EMap.MapServer.Services.Models
                 //string href = $"{_host}/EMap/Services/{serviceName}/MapServer/Wmts";
                 Capabilities capabilities = wmtsService.CreateCapabilities(href);
                 servicePath = Path.Combine(serviceDirectory, "WMTSCapabilities.xml");
-                using (StreamWriter sw = new StreamWriter(servicePath))
-                {
-                    wmtsService.XmlSerialize(sw, capabilities);
-                }
+                SaveCapabilities(wmtsService, servicePath, capabilities);
             }
             else
             {
@@ -110,34 +107,78 @@ namespace EMap.MapServer.Services.Models
             ret = true;
             return ret;
         }
-        public bool AddLayerToCapabilities(OgcServiceType serviceType, string serviceVersion, string capabilitiesPath, string layerPath)
+        public bool AddLayerToCapabilities(ServiceRecord serviceRecord, string capabilitiesPath, string layerPath)
         {
             bool ret = false;
-            IOgcService ogcService = GetOgcService(serviceType, serviceVersion);
-            switch (serviceType)
+            IOgcService ogcService = GetOgcService(serviceRecord.Type, serviceRecord.Version);
+            switch (serviceRecord.Type)
             {
                 case OgcServiceType.Wmts:
                     IWmtsService wmtsService = ogcService as IWmtsService;
-                    Capabilities capabilities = null;
-                    using (StreamReader sr = new StreamReader(capabilitiesPath))
-                    {
-                        capabilities = wmtsService.XmlDeSerialize(sr);
-                    }
+                    Capabilities capabilities = GetCapabilities(wmtsService, capabilitiesPath);
                     if (capabilities != null)
                     {
-                        LayerType layerType = wmtsService.AddContent(capabilities, layerPath);
+                        LayerType layerType = wmtsService.AddLayerType(capabilities, layerPath);
                         if (layerType != null)
                         {
-                            using (StreamWriter sw = new StreamWriter(capabilitiesPath))
-                            {
-                                wmtsService.XmlSerialize(sw, capabilities);
-                            }
+                            SaveCapabilities(wmtsService, capabilitiesPath, capabilities);
                             ret = true;
                         }
                     }
                     break;
             }
+            if (ret)
+            {
+                string destName = Path.GetFileNameWithoutExtension(layerPath);
+                LayerRecord layerRecord = new LayerRecord()
+                {
+                    Name = destName,
+                    Path = layerPath,
+                    Service = serviceRecord
+                };
+                _configContext.Layers.Add(layerRecord);
+            }
             return ret;
+        }
+        public static Capabilities GetCapabilities(IWmtsService wmtsService, string capabilitiesPath)
+        {
+            Capabilities capabilities = null;
+            using (StreamReader sr = new StreamReader(capabilitiesPath))
+            {
+                capabilities = wmtsService.XmlDeSerialize(sr);
+            }
+            return capabilities;
+        }
+        public static void SaveCapabilities(IWmtsService wmtsService, string capabilitiesPath, Capabilities capabilities)
+        {
+            using (StreamWriter sw = new StreamWriter(capabilitiesPath))
+            {
+                wmtsService.XmlSerialize(sw, capabilities);
+            }
+        }
+        public async Task RemoveLayerFromCapabilities(ServiceRecord serviceRecord, string capabilitiesPath, LayerRecord layerRecord)
+        {
+            if (layerRecord == null)
+            {
+                return;
+            }
+            #region 删除数据库及数据
+            _configContext.Layers.Remove(layerRecord);
+            var ret= await _configContext.SaveChangesAsync();
+            DeleteDataSet(layerRecord.Path);
+            #endregion
+            #region 删除XML中的图层
+            IOgcService ogcService = GetOgcService(serviceRecord.Type, serviceRecord.Version);
+            switch (serviceRecord.Type)
+            {
+                case OgcServiceType.Wmts:
+                    IWmtsService wmtsService = ogcService as IWmtsService;
+                    Capabilities capabilities = GetCapabilities(wmtsService, capabilitiesPath);
+                    wmtsService.RemoveLayerType(capabilities, layerRecord.Name);
+                    SaveCapabilities(wmtsService, capabilitiesPath, capabilities);
+                    break;
+            }
+            #endregion
         }
         public static IOgcService GetOgcService(OgcServiceType serviceType, string serviceVersion)
         {
@@ -185,17 +226,45 @@ namespace EMap.MapServer.Services.Models
             return ogcService;
         }
         /// <summary>
-        /// 将文件移动至新的位置，将会移动所有相同名称不同后缀的文件
+        /// 获取数据集（相同名称不同后缀）的所有文件全名
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static string[] GetDataSetFileNames(string fileName)
+        {
+            string[] fileNames = null;
+            if (File.Exists(fileName))
+            {
+                string srcDirectory = Path.GetDirectoryName(fileName);
+                string srcName = Path.GetFileNameWithoutExtension(fileName);
+                fileNames = Directory.GetFiles(srcDirectory, $"{srcName}.*");
+            }
+            return fileNames;
+        }
+        public static void DeleteDataSet(string fileName)
+        {
+            string[] fileNames = GetDataSetFileNames(fileName);
+            if (fileNames != null)
+            {
+                foreach (var item in fileNames)
+                {
+                    if (File.Exists(item))
+                    {
+                        File.Delete(item);
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// 将数据集移动至新的位置，将会移动所有相同名称不同后缀的文件
         /// </summary>
         /// <param name="srcFileName"></param>
         /// <param name="destFileName"></param>
-        public static void MoveFile(string srcFileName, string destFileName)
+        public static void MoveDataSet(string srcFileName, string destFileName)
         {
-            if (File.Exists(srcFileName))
+            string[] srcFileNames = GetDataSetFileNames(srcFileName);
+            if (srcFileNames != null)
             {
-                string srcDirectory = Path.GetDirectoryName(srcFileName);
-                string srcName = Path.GetFileNameWithoutExtension(srcFileName);
-                string[] srcFileNames = Directory.GetFiles(srcDirectory, $"{srcName}.*");
                 string destDirectory = Path.GetDirectoryName(destFileName);
                 if (!Directory.Exists(destDirectory))
                 {
@@ -205,6 +274,10 @@ namespace EMap.MapServer.Services.Models
                 {
                     string nameWithExtension = Path.GetFileName(srcPath);
                     string destPath = Path.Combine(destDirectory, nameWithExtension);
+                    if (File.Exists(destPath))
+                    {
+                        File.Delete(destPath);
+                    }
                     File.Move(srcPath, destPath);
                 }
             }

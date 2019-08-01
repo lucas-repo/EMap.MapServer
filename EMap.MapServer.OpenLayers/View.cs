@@ -54,7 +54,7 @@ namespace EMap.MapServer.OpenLayers
         /// <summary>
         /// 投影，默认为Spherical Mercator，值为'EPSG:3857'，OpenLayers只支持4326和3857
         /// </summary>
-        public string projection { get; set; }
+        public string projection { get; set; } = "EPSG:3857";
         /// <summary>
         /// Resolutions to determine the resolution constraint.If set the `maxResolution`, `minResolution`, `minZoom`, `maxZoom`, and `zoomFactor` options are ignored.
         /// </summary>

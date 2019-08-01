@@ -87,7 +87,34 @@ namespace EMap.MapServer.Ogc.Services.Gdals
         {
             string projectionStr = dataset.GetProjection();
             dataset.GetExtent(out double xMin, out double yMin, out double xMax, out double yMax);
-            LayerType layerType = CapabilitiesHelper.AddToCapabilities(capabilities, name, projectionStr, xMin, yMin, xMax, yMax);
+            double[] affineParas = new double[6];
+            dataset.GetGeoTransform(affineParas);
+            double xRes = affineParas[1];
+            double yRes = -affineParas[5];
+            double resolution = Math.Min(xRes, yRes);
+            int minLevel = 0;
+            int maxLevel = 19;
+            string projcs = null;
+            string geogcs = null;
+            using (OSGeo.OSR.SpatialReference srcSR = new OSGeo.OSR.SpatialReference(projectionStr))
+            {
+                projcs = srcSR.GetAttrValue("PROJCS", 0);
+                if (string.IsNullOrEmpty(projcs))
+                {
+                    geogcs = srcSR.GetAttrValue("GEOGCS", 0);
+                }
+            }
+            bool isDegree = projcs == null && geogcs != null;
+            for (int i = 0; i < 30; i++)
+            {
+                double tmpResolution = TileMatrix.GetResolution(isDegree, i);
+                if (resolution >= tmpResolution)
+                {
+                    maxLevel = i;
+                    break;
+                }
+            }
+            LayerType layerType = CapabilitiesHelper.AddToCapabilities(capabilities, name, projectionStr, xMin, yMin, xMax, yMax, minLevel, maxLevel);
             string href = capabilities.GetHref(WmtsOperationType.GetTile, WmtsRequestType.REST);
             string tileMatrixSet = null;
             using (var spatialReference = dataset.GetSpatialReference())
@@ -95,8 +122,7 @@ namespace EMap.MapServer.Ogc.Services.Gdals
                 tileMatrixSet = spatialReference.GetAttrValue("GEOGCS", 0);
             }
             URLTemplateType tileTemplate = CapabilitiesHelper.CreateTileResourceURL(href, name, tileMatrixSet);
-            URLTemplateType featureInfoTemplate = CapabilitiesHelper.CreateFeatureInfoResourceURL(href, name, tileMatrixSet);
-            layerType.ResourceURL = new URLTemplateType[] { tileTemplate, featureInfoTemplate };
+            layerType.ResourceURL = new URLTemplateType[] { tileTemplate };
             return layerType;
         }
 

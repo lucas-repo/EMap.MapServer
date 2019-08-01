@@ -1,10 +1,6 @@
-﻿using EMap.MapServer.Extensions;
-using EMap.MapServer.Ogc.Ows1_1;
+﻿using EMap.MapServer.Ogc.Ows1_1;
 using EMap.MapServer.Ogc.Wmts1;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace EMap.MapServer.Ogc.Services
 {

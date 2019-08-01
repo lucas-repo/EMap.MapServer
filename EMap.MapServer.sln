@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29025.244
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Extensions", "EMap.MapServer.Extensions\EMap.MapServer.Extensions.csproj", "{98A274F9-B438-45E5-B8DC-1AC28CFEDE48}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Isotc211.Gco", "EMap.MapServer.Isotc211.Gco\EMap.MapServer.Isotc211.Gco.csproj", "{425B4622-A52D-4691-A8E9-AC8242234C39}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Isotc211.Gmd", "EMap.MapServer.Isotc211.Gmd\EMap.MapServer.Isotc211.Gmd.csproj", "{A78D559F-BC40-40F0-A97A-A1C9688AD36F}"
@@ -55,16 +53,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.OpenLayers",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer.Ogc.Services.Gdals", "EMap.MapServer.Ogc.Services.Gdals\EMap.MapServer.Ogc.Services.Gdals.csproj", "{D26FA0E5-6659-445F-A64A-24E6F5EB7246}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMap.MapServer", "EMap.MapServer\EMap.MapServer.csproj", "{B4A658C0-F43E-4915-966C-220C46171553}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{98A274F9-B438-45E5-B8DC-1AC28CFEDE48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{98A274F9-B438-45E5-B8DC-1AC28CFEDE48}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{98A274F9-B438-45E5-B8DC-1AC28CFEDE48}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{98A274F9-B438-45E5-B8DC-1AC28CFEDE48}.Release|Any CPU.Build.0 = Release|Any CPU
 		{425B4622-A52D-4691-A8E9-AC8242234C39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{425B4622-A52D-4691-A8E9-AC8242234C39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{425B4622-A52D-4691-A8E9-AC8242234C39}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -165,6 +161,10 @@ Global
 		{D26FA0E5-6659-445F-A64A-24E6F5EB7246}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D26FA0E5-6659-445F-A64A-24E6F5EB7246}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D26FA0E5-6659-445F-A64A-24E6F5EB7246}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4A658C0-F43E-4915-966C-220C46171553}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4A658C0-F43E-4915-966C-220C46171553}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4A658C0-F43E-4915-966C-220C46171553}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4A658C0-F43E-4915-966C-220C46171553}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

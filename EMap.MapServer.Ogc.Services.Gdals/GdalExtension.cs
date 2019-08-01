@@ -82,18 +82,15 @@ namespace EMap.MapServer.Ogc.Services.Gdals
             spatialReference = new OSGeo.OSR.SpatialReference(dataset.GetProjection());
             return spatialReference;
         }
-
-        public static LayerType AddToCapabilities(this Dataset dataset, string name, Capabilities capabilities)
+        public static void GetSuitableZoom(this Dataset dataset, ref int minZoom, ref int maxZoom)
         {
             string projectionStr = dataset.GetProjection();
-            dataset.GetExtent(out double xMin, out double yMin, out double xMax, out double yMax);
             double[] affineParas = new double[6];
             dataset.GetGeoTransform(affineParas);
             double xRes = affineParas[1];
             double yRes = -affineParas[5];
             double resolution = Math.Min(xRes, yRes);
-            int minLevel = 0;
-            int maxLevel = 19;
+            double dWidth = Math.Max(dataset.RasterXSize * xRes, dataset.RasterYSize * yRes);
             string projcs = null;
             string geogcs = null;
             using (OSGeo.OSR.SpatialReference srcSR = new OSGeo.OSR.SpatialReference(projectionStr))
@@ -105,15 +102,47 @@ namespace EMap.MapServer.Ogc.Services.Gdals
                 }
             }
             bool isDegree = projcs == null && geogcs != null;
+            bool minZoomSeted = false;
+            bool maxZoomSeted = false;
             for (int i = 0; i < 30; i++)
             {
                 double tmpResolution = TileMatrix.GetResolution(isDegree, i);
-                if (resolution >= tmpResolution)
+                if (!minZoomSeted)
                 {
-                    maxLevel = i;
+                    if (dWidth / tmpResolution > 256)
+                    {
+                        if (i == 0)
+                        {
+                            minZoom = i;
+                        }
+                        else
+                        {
+                            minZoom = i - 1;
+                        }
+                        minZoomSeted = true;
+                    }
+                }
+                if (!maxZoomSeted)
+                {
+                    if (resolution >= tmpResolution)
+                    {
+                        maxZoom = i;
+                        maxZoomSeted = true;
+                    }
+                }
+                if (minZoomSeted && maxZoomSeted)
+                {
                     break;
                 }
             }
+        }
+        public static LayerType AddToCapabilities(this Dataset dataset, string name, Capabilities capabilities)
+        {
+            string projectionStr = dataset.GetProjection();
+            dataset.GetExtent(out double xMin, out double yMin, out double xMax, out double yMax);
+            int minLevel = 0;
+            int maxLevel = 19;
+            dataset.GetSuitableZoom(ref minLevel, ref maxLevel);
             LayerType layerType = CapabilitiesHelper.AddToCapabilities(capabilities, name, projectionStr, xMin, yMin, xMax, yMax, minLevel, maxLevel);
             string href = capabilities.GetHref(WmtsOperationType.GetTile, WmtsRequestType.REST);
             string tileMatrixSet = null;

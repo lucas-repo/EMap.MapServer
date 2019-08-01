@@ -12,16 +12,6 @@ namespace EMap.MapServer.Ogc.Services.Gdals
     /// </summary>
     public static class CapabilitiesExtension
     {
-        public static string GetFirstTileMartrixSetName(this Capabilities capabilities, string layerName)
-        {
-            string tileMartrixSetName = null;
-            LayerType layerType = capabilities.GetLayerType(layerName);
-            if (layerType != null)
-            {
-                tileMartrixSetName = layerType.TileMatrixSetLink?.FirstOrDefault().TileMatrixSet;
-            }
-            return tileMartrixSetName;
-        }
         public static string GetHref(this Capabilities capabilities, WmtsOperationType operationType = WmtsOperationType.GetTile, WmtsRequestType requestMethod = WmtsRequestType.REST)
         {
             string href = null;

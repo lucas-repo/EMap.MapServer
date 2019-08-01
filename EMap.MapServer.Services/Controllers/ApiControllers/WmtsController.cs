@@ -530,7 +530,7 @@ namespace EMap.MapServer.Services.Controllers
         #endregion  
 
         #region KVP
-        public async Task<ActionResult> RequestByKvp(string service = "wmts", string version = "1.0.0", string serviceName = null, string request = "GetCapabilities", string layer = null, string style = "default", string format = null, string tileMatrixSet = null, string tileMatrix = null, int tileRow = 0, int tileCol = 0, int j = 0, int i = 0)
+        public async Task<ActionResult> RequestByKvp(string service = "WMTS", string version = "1.0.0", string serviceName = null, string request = "GetCapabilities", string layer = null, string style = "default", string format = null, string tileMatrixSet = null, string tileMatrix = null, int tileRow = 0, int tileCol = 0, int j = 0, int i = 0)
         {
             ActionResult actionResult = null;
             if (version == "1.0.0")

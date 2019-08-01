@@ -175,7 +175,7 @@ namespace EMap.MapServer.Ogc.Wmts1
             bool convertResult = int.TryParse(array[array.Length - 1], out int epsg);
             String projcs = SpatialReferenceHelper.GetProjcs(epsg);
             String geogcs = SpatialReferenceHelper.GetGeogcs(epsg);
-            ret =  string.IsNullOrEmpty(projcs) && !string.IsNullOrEmpty(geogcs);
+            ret = string.IsNullOrEmpty(projcs) && !string.IsNullOrEmpty(geogcs);
             return ret;
         }
         public List<double> GetResolutions(IEnumerable<string> tileMatrixIdentifiers)
@@ -193,35 +193,54 @@ namespace EMap.MapServer.Ogc.Wmts1
             }
             return resolutions;
         }
-        public static int GetSuitableZoom(List<double> resolutions, double xmin, double ymin, double xmax, double ymax, int width, int height)
+        /// <summary>
+        /// 获取最佳缩放级别，resolutions必须从0级开始
+        /// </summary>
+        /// <param name="resolutions"></param>
+        /// <param name="xmin"></param>
+        /// <param name="ymin"></param>
+        /// <param name="xmax"></param>
+        /// <param name="ymax"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        public static int? GetSuitableZoom(List<double> resolutions, double xmin, double ymin, double xmax, double ymax, int width, int height)
+        {
+            int? level = null;
+            double? suitableResolution = GetSuitableResolution(resolutions, xmin, ymin, xmax, ymax, width, height);
+            if (suitableResolution.HasValue)
+            {
+                level = resolutions.IndexOf(suitableResolution.Value);
+            }
+            return level;
+        }
+        public static double? GetSuitableResolution(List<double> resolutions, double xmin, double ymin, double xmax, double ymax, int width, int height)
         {
             if (resolutions == null || resolutions.Count == 0)
             {
                 throw new Exception("resolutions不能为空");
             }
+            double? suitableResolution = null;
             double dx = xmax - xmin;
             double dy = ymax - ymin;
             double resolution = Math.Max(dy / height, dx / width);
-            //resolution *= 4.0 / 3;//扩展显示范围
-            int level = 0;
             for (int i = 0; i < resolutions.Count; i++)
             {
                 if (resolution > resolutions[i])
                 {
                     if (i == 0)
                     {
-                        level = i;
+                        suitableResolution = resolutions[i];
                     }
                     else
                     {
-                        level = i - 1;
+                        suitableResolution = resolutions[i - 1];
                     }
                     break;
                 }
             }
-            return level;
+            return suitableResolution;
         }
-        
         #endregion
     }
 }

@@ -141,9 +141,9 @@ namespace EMap.MapServer.Services.Controllers
                     double centerY = (ymin + ymax) / 2;
                     view.center = new double[] { centerX, centerY };
                     view.extent = extent;
-                    view.zoom = TileMatrixSet.GetSuitableZoom(resolutions.ToList(), xmin, ymin, xmax, ymax, width, height);
-                    view.resolution = resolutions[view.zoom];
-                    view.maxZoom = resolutions.Length - 1;
+                    view.resolution = TileMatrixSet.GetSuitableResolution(resolutions.ToList(), xmin, ymin, xmax, ymax, width, height);
+                    view.minResolution = resolutions[resolutions.Length - 1];
+                    view.maxResolution = resolutions[0];
                     if (!string.IsNullOrEmpty(tileMatrixSet.SupportedCRS))
                     {
                         string[] array = tileMatrixSet.SupportedCRS.Split("EPSG");

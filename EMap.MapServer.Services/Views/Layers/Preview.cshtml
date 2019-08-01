@@ -116,10 +116,10 @@
                 addProjection(epsg, function () {
                     view = new ol.View({
                         center: viewPara.center,
-                        zoom: viewPara.zoom,
-                        resolution:viewPara.resolution,
+                        resolution: viewPara.resolution,
+                        minResolution: viewPara.minResolution,
+                        maxResolution:viewPara.maxResolution,
                         extent: viewPara.extent,
-                        maxZoom: viewPara.maxZoom,
                         projection: code
                     });
                     onsucess(view);
@@ -128,9 +128,10 @@
             else { 
                 view = new ol.View({
                     center: viewPara.center,
-                    zoom: viewPara.zoom,
+                    resolution: viewPara.resolution,
+                    minResolution: viewPara.minResolution,
+                    maxResolution:viewPara.maxResolution,
                     extent: viewPara.extent,
-                    maxZoom: viewPara.maxZoom,
                     projection: code
                 });
                 onsucess(view);

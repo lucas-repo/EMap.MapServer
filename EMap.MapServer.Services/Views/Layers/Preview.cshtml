@@ -48,63 +48,65 @@
             });
             return layer;
         }
-        function addProjection(epsg,onsuccess) {
-            fetch('https://epsg.io/?format=json&q=' + epsg).then(function (response) {
-            return response.json();
-            }).then(function (json) {
-                const results = json['results'];
-                if (results && results.length > 0) {
-                    for (let i = 0, ii = results.length; i < ii; i++) {
-                        const result = results[i];
-                        if (result) {
-                            var code = result['code'] ;
-                            var name = result['name'];
-                            var area = result['area'];
-                            var unit = result['unit'];
-                            var proj4def = result['proj4'];
-                            var bbox = result['bbox'];
-                            if (code && code.length > 0 && proj4def && proj4def.length > 0 &&
-                                bbox && bbox.length == 4) {
-                                code = "EPSG:" + code;
-                                unit = unit.split(" ")[0];
-                                var extent = [bbox[1], bbox[2], bbox[3], bbox[0]];
-                                var worldExtent = [bbox[1], bbox[2], bbox[3], bbox[0]];
-                                var units = ol.proj.Units.DEGREES;
-                                var metersPerUnit = proj4def.to_meter;
-                                const radius = 6378137;
-                                switch (unit) {
-                                    case "degree":
-                                        metersPerUnit = Math.PI * radius / 180;
-                                        extent = [bbox[1], bbox[2], bbox[3], bbox[0]];
-                                        units = ol.proj.Units.DEGREES;
-                                        break;
-                                    case "metre":
-                                        var halfSize = Math.PI * radius;
-                                        extent =[-halfSize, -halfSize,halfSize, halfSize];
-                                        units = ol.proj.Units.METERS;
-                                        break;
+        function addProjection(epsg) {
+            $.ajax({
+                url: 'https://epsg.io/?format=json&q=' + epsg,
+                async: false,
+                type: 'GET',
+                success: function (response) {
+                    const results = response['results'];
+                    if (results && results.length > 0) {
+                        for (let i = 0, ii = results.length; i < ii; i++) {
+                            const result = results[i];
+                            if (result) {
+                                var code = result['code'];
+                                var name = result['name'];
+                                var area = result['area'];
+                                var unit = result['unit'];
+                                var proj4def = result['proj4'];
+                                var bbox = result['bbox'];
+                                if (code && code.length > 0 && proj4def && proj4def.length > 0 &&
+                                    bbox && bbox.length == 4) {
+                                    code = "EPSG:" + code;
+                                    unit = unit.split(" ")[0];
+                                    var extent = [bbox[1], bbox[2], bbox[3], bbox[0]];
+                                    var worldExtent = [bbox[1], bbox[2], bbox[3], bbox[0]];
+                                    var units = ol.proj.Units.DEGREES;
+                                    var metersPerUnit = proj4def.to_meter;
+                                    const radius = 6378137;
+                                    switch (unit) {
+                                        case "degree":
+                                            metersPerUnit = Math.PI * radius / 180;
+                                            extent = [bbox[1], bbox[2], bbox[3], bbox[0]];
+                                            units = ol.proj.Units.DEGREES;
+                                            break;
+                                        case "metre":
+                                            var halfSize = Math.PI * radius;
+                                            extent = [-halfSize, -halfSize, halfSize, halfSize];
+                                            units = ol.proj.Units.METERS;
+                                            break;
+                                    }
+                                    var projection = new ol.proj.Projection({
+                                        code: code,
+                                        units: units,
+                                        extent: extent,
+                                        axisOrientation: proj4def.axis,
+                                        global: area == "World",
+                                        metersPerUnit: metersPerUnit,
+                                        worldExtent: worldExtent
+                                    });
+                                    ol.proj.addProjection(projection);
                                 }
-                                var projection = new ol.proj.Projection({
-                                    code: code,
-                                    units: units,
-                                    extent: extent,
-                                    axisOrientation: proj4def.axis,
-                                    global: area == "World",
-                                    metersPerUnit: metersPerUnit,
-                                    worldExtent:worldExtent
-                                });
-                                ol.proj.addProjection(projection);
                             }
                         }
                     }
-                    onsuccess();
-                }
-                else {
-                    alert("添加空间参考" + epsg + "失败:");
+                    else {
+                        alert("添加空间参考" + epsg + "失败:");
+                    }
                 }
             });
         }
-        function getView(viewPara,onsucess) {
+        function getView(viewPara) {
             var view = null;
             if (viewPara == null) {
                 return ;
@@ -113,35 +115,22 @@
             var projection = ol.proj.get(code);
             if (projection == null) {
                 var epsg = code.split(":")[1];
-                addProjection(epsg, function () {
-                    view = new ol.View({
-                        center: viewPara.center,
-                        resolution: viewPara.resolution,
-                        minResolution: viewPara.minResolution,
-                        maxResolution:viewPara.maxResolution,
-                        extent: viewPara.extent,
-                        projection: code
-                    });
-                    onsucess(view);
-                });
+                addProjection(epsg);
             }
-            else { 
-                view = new ol.View({
-                    center: viewPara.center,
-                    resolution: viewPara.resolution,
-                    minResolution: viewPara.minResolution,
-                    maxResolution:viewPara.maxResolution,
-                    extent: viewPara.extent,
-                    projection: code
-                });
-                onsucess(view);
-            }
+            view = new ol.View({
+                center: viewPara.center,
+                resolution: viewPara.resolution,
+                minResolution: viewPara.minResolution,
+                maxResolution:viewPara.maxResolution,
+                extent: viewPara.extent,
+                projection: code
+            });
+            return view;
         }
         function initializeMap(mapPara) {
             if (mapPara == null) {
                 return;
             }
-
             var layers = [];
             var layersPara = mapPara.layers;
             if (layersPara != null) {
@@ -160,12 +149,11 @@
                 }
             }
             var viewPara = mapPara.view;
-            getView(viewPara, function (view) {
-                var map = new ol.Map({
-                    layers: layers,
-                    target: 'map',
-                    view: view
-                });
+            var view = getView(viewPara);
+            var map = new ol.Map({
+                layers: layers,
+                target: 'map',
+                view: view
             });
         }
 
@@ -174,7 +162,8 @@
         var url = '@Url.Action($"Preview" )' + '/' + width + '/' + height;
         console.log(url);
         $.ajax({
-            url:url,
+            url: url,
+            async:false,
             type: 'GET',
             success: function (mapPara) {
                 if (mapPara != null) {

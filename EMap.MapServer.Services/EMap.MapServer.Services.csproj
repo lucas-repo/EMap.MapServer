@@ -34,10 +34,204 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EMap.MapServer.Ogc.Services.Gdals\EMap.MapServer.Ogc.Services.Gdals.csproj" />
-    <ProjectReference Include="..\EMap.MapServer.Ogc.Services\EMap.MapServer.Ogc.Services.csproj" />
-    <ProjectReference Include="..\EMap.MapServer.Ogc.Wmts1\EMap.MapServer.Ogc.Wmts1.csproj" />
     <ProjectReference Include="..\EMap.MapServer.OpenLayers\EMap.MapServer.OpenLayers.csproj" />
+    <ProjectReference Include="..\EMap.OgcStandards.Services.Gdals\EMap.OgcStandards.Services.Gdals.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="EMap">
+      <HintPath>Dependencies\EMap\EMap.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="EMap.OgcStandards.Ows1_1">
+      <HintPath>Dependencies\EMap\EMap.OgcStandards.Ows1_1.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="EMap.OgcStandards.Services">
+      <HintPath>Dependencies\EMap\EMap.OgcStandards.Services.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="EMap.OgcStandards.Wmts1">
+      <HintPath>Dependencies\EMap\EMap.OgcStandards.Wmts1.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Dependencies\EMap\EMap.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.Gis.Data.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.Gis.Data.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.Gis.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.Gis.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.Gis.Symbology.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.Gis.Symbology.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.Isotc211.Gco.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.Isotc211.Gco.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.Isotc211.Gmd.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.Isotc211.Gmd.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.Isotc211.Gsr.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.Isotc211.Gsr.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.Isotc211.Gss.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.Isotc211.Gss.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.Isotc211.Gts.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.Isotc211.Gts.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Fes2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Fes2.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Gml.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Gml.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Gml3_2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Gml3_2.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Gmlcov1.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Gmlcov1.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Ogc.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Ogc.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Ows.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Ows.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Ows1_1.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Ows1_1.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Ows2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Ows2.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Se.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Se.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Security1.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Security1.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Services.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Services.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Sld.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Sld.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Swe2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Swe2.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Wcs2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Wcs2.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Wfs2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Wfs2.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Wms.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Wms.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Wmts1.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Wmts1.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.SMIL20.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.SMIL20.Language.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.SMIL20.Language.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.SMIL20.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.Xlink.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.Xlink.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

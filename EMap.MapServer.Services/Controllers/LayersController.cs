@@ -1,4 +1,4 @@
-﻿using EMap.MapServer.Ogc.Services.Gdals;
+﻿using EMap.OgcStandards.Services.Gdals;
 using EMap.MapServer.Services.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -17,7 +17,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Query;
 using EMap.MapServer.OpenLayers;
-using EMap.MapServer.Ogc.Wmts1;
+using EMap.OgcStandards.Wmts1;
 using EMap.MapServer.Services.ViewModels;
 using EMap.MapServer.OpenLayers.proj;
 

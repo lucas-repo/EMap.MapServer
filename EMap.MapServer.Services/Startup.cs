@@ -17,7 +17,7 @@ namespace EMap.MapServer.Services
     {
         public Startup(IConfiguration configuration)
         {
-            //AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             Configuration = configuration;
         }
         private static Assembly GetAssembly(string fileName)
@@ -31,28 +31,29 @@ namespace EMap.MapServer.Services
         }
         private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
+            string privatePath = "EMap";
             Assembly assembly = null;
-
-            var privatePath = Configuration.GetValue<string>("privatePath");
             string[] directoryNames = privatePath.Split(';');
             string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
             string extension = Path.GetExtension(args.RequestingAssembly.CodeBase);
-            string directory = null;
             string[] arry = args.Name.Split(',');
             string name = arry[0];
-            string path = null;
             foreach (var directoryName in directoryNames)
             {
-                directory = Path.Combine(baseDirectory, directoryName);
-                path = Path.Combine(directory, $"{name}{extension}");
-                assembly = GetAssembly(path);
-                if (assembly != null)
+                string directory = Path.Combine(baseDirectory, directoryName);
+                string path = Path.Combine(directory, $"{name}{extension}");
+                if (File.Exists(path))
                 {
-                    break;
+                    assembly = Assembly.LoadFrom(path);
+                    if (assembly != null)
+                    {
+                        break;
+                    }
                 }
             }
             return assembly;
         }
+
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.

@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EMap.MapServer.Services.Models;
-using EMap.MapServer.Ogc.Services;
+using EMap.OgcStandards.Services;
 using Microsoft.AspNetCore.Hosting;
-using EMap.MapServer.Ogc.Wmts1;
+using EMap.OgcStandards.Wmts1;
 using System.IO;
 using System.Text.Encodings.Web;
 

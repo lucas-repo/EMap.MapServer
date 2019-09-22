@@ -1,7 +1,7 @@
 ﻿//using EMap.MapServer.DotSpatial;
-using EMap.MapServer.Ogc.Services;
-using EMap.MapServer.Ogc.Services.Gdals;
-using EMap.MapServer.Ogc.Wmts1;
+using EMap.OgcStandards.Services;
+using EMap.OgcStandards.Services.Gdals;
+using EMap.OgcStandards.Wmts1;
 using EMap.MapServer.Services.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

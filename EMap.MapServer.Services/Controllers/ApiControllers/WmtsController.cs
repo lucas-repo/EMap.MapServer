@@ -1,7 +1,8 @@
-﻿using EMap.MapServer.Ogc.Ows1_1;
-using EMap.MapServer.Ogc.Services;
-using EMap.MapServer.Ogc.Wmts1;
-using EMap.MapServer.Services.Models;
+﻿using EMap.MapServer.Services.Models;
+using EMap.OgcStandards.Ows1_1;
+using EMap.OgcStandards.Services;
+using EMap.OgcStandards.Services.Gdals;
+using EMap.OgcStandards.Wmts1;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

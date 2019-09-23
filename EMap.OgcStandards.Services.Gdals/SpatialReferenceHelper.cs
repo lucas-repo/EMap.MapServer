@@ -13,7 +13,7 @@ namespace EMap.OgcStandards.Services.Gdals
         {
             if (_spatialReferencePath == null)
             {
-                _spatialReferencePath = ResourceHelper.GetFileName("spatialreference.db", "EMap.MapServer");
+                _spatialReferencePath = ResourceHelper.GetFileName("spatialreference.db", typeof(SpatialReferenceHelper).Assembly);
             }
         }
         private static object ExcuteSql(string commandText)

@@ -223,7 +223,7 @@ namespace EMap.OgcStandards.Services.Gdals
                     Rectangle rectangle = new Rectangle(0, 0, tileWidth, tileHeight);
                     using (var image = new Image<Rgba32>(rectangle.Width, rectangle.Height))
                     {
-                        layer.DrawReagion(image, rectangle, layer.Extents, false, null, null);
+                        layer.DrawReagion(image, rectangle, envelope, false, null, null);
                         using (MemoryStream ms = new MemoryStream())
                         {
                             string formatName = getTile.Format.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries)[1];

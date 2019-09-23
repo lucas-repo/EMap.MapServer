@@ -5,11 +5,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\Bin\Debug\</OutputPath>
+    <OutputPath>..\bin\Debug\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>..\Bin\Release\</OutputPath>
+    <OutputPath>..\bin\Release\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,17 +30,20 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
     <PackageReference Include="SharpZipLib" Version="1.1.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0006" />
+    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0006" />
+    <PackageReference Include="SixLabors.Shapes" Version="1.0.0-beta0008" />
+    <PackageReference Include="SixLabors.Shapes.Text" Version="1.0.0-beta0008" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.5.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\EMap.MapServer.OpenLayers\EMap.MapServer.OpenLayers.csproj" />
-    <ProjectReference Include="..\EMap.OgcStandards.Services.Gdals\EMap.OgcStandards.Services.Gdals.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="EMap">
       <HintPath>Dependencies\EMap\EMap.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="EMap.MapServer.OpenLayers">
+      <HintPath>Dependencies\EMap\EMap.MapServer.OpenLayers.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="EMap.OgcStandards.Ows1_1">
@@ -49,6 +52,10 @@
     </Reference>
     <Reference Include="EMap.OgcStandards.Services">
       <HintPath>Dependencies\EMap\EMap.OgcStandards.Services.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="EMap.OgcStandards.Services.Gdals">
+      <HintPath>Dependencies\EMap\EMap.OgcStandards.Services.Gdals.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="EMap.OgcStandards.Wmts1">
@@ -107,6 +114,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Dependencies\EMap\EMap.Isotc211.Gts.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.MapServer.OpenLayers.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.MapServer.OpenLayers.pdb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Dependencies\EMap\EMap.OgcStandards.Fes2.dll">
@@ -172,6 +185,12 @@
     <None Update="Dependencies\EMap\EMap.OgcStandards.Services.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Services.Gdals.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\EMap.OgcStandards.Services.Gdals.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Dependencies\EMap\EMap.OgcStandards.Services.pdb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -230,6 +249,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Dependencies\EMap\EMap.Xlink.pdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\EMap\spatialreference.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
